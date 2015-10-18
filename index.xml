@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Developer&#39;s adventures</title>
+    <link>http://rag0n.github.io/</link>
+    <description>Recent content on Developer&#39;s adventures</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru</language>
+    <managingEditor>alexander.ragon@gmail.com (Alexander Guschin)</managingEditor>
+    <webMaster>alexander.ragon@gmail.com (Alexander Guschin)</webMaster>
+    <copyright>(c) 2015 Rag0n</copyright>
+    <atom:link href="http://rag0n.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+  </channel>
+</rss>
