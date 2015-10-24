@@ -2,33 +2,133 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Developer&#39;s adventures</title>
-    <link>http://localhost:1313/post/</link>
+    <link>http://rag0n.github.io/post/</link>
     <description>Recent content in Posts on Developer&#39;s adventures</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru</language>
     <managingEditor>alexander.ragon@gmail.com (Alexander Guschin)</managingEditor>
     <webMaster>alexander.ragon@gmail.com (Alexander Guschin)</webMaster>
     <copyright>(c) 2015 Rag0n</copyright>
-    <lastBuildDate>Sun, 18 Oct 2015 19:36:40 +0300</lastBuildDate>
-    <atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 24 Oct 2015 12:42:12 +0300</lastBuildDate>
+    <atom:link href="http://rag0n.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>third</title>
-      <link>http://localhost:1313/2015/10/18/third/</link>
-      <pubDate>Sun, 18 Oct 2015 19:36:40 +0300</pubDate>
+      <title>Как программно добавить Autolayout constraints</title>
+      <link>http://rag0n.github.io/2015/10/24/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/</link>
+      <pubDate>Sat, 24 Oct 2015 12:42:12 +0300</pubDate>
       <author>alexander.ragon@gmail.com (Alexander Guschin)</author>
-      <guid>http://localhost:1313/2015/10/18/third/</guid>
-      <description>&lt;p&gt;heleeeeelellele&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>second</title>
-      <link>http://localhost:1313/2015/10/18/second/</link>
-      <pubDate>Sun, 18 Oct 2015 17:41:13 +0300</pubDate>
-      <author>alexander.ragon@gmail.com (Alexander Guschin)</author>
-      <guid>http://localhost:1313/2015/10/18/second/</guid>
-      <description>&lt;p&gt;ny second post!!&lt;/p&gt;
+      <guid>http://rag0n.github.io/2015/10/24/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/</guid>
+      <description>
+
+&lt;h3 id=&#34;используя-классический-способ&#34;&gt;Используя классический способ&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    newView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(newView)
+
+    let horizontalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
+    view.addConstraint(horizontalConstraint)
+
+    let verticalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
+    view.addConstraint(verticalConstraint)
+
+    let widthConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
+    newView.addConstraint(widthConstraint)
+    // view.addConstraint(widthConstraint) // работает аналогично
+
+    let heightConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
+    newView.addConstraint(heightConstraint)
+    // view.addConstraint(heightConstraint) // работает аналогично
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;используя-смешанный-способ-классический-visual-format-language&#34;&gt;Используя смешанный способ(Классический + Visual Format Language)&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    newView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(newView)
+
+    let horizontalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
+    view.addConstraint(horizontalConstraint)
+
+    let verticalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
+    view.addConstraint(verticalConstraint)
+
+    let views = [&amp;quot;newView&amp;quot;: newView]
+
+    let widthConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&amp;quot;H:[newView(100)]&amp;quot;, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+    newView.addConstraints(widthConstraints)
+    // view.addConstraints(widthConstraints) // работает аналогично
+
+    let heightConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&amp;quot;V:[newView(100)]&amp;quot;, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+    newView.addConstraints(heightConstraints)
+    // view.addConstraints(heightConstraints) // работает аналогично
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;используя-только-visual-format-language&#34;&gt;Используя только Visual Format Language&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    newView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(newView)
+
+    let views = [&amp;quot;view&amp;quot;: view, &amp;quot;newView&amp;quot;: newView]
+    let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&amp;quot;H:[view]-(&amp;lt;=0)-[newView(100)]&amp;quot;, options: NSLayoutFormatOptions.AlignAllCenterY, metrics: nil, views: views)
+    view.addConstraints(horizontalConstraints)
+    let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&amp;quot;V:[view]-(&amp;lt;=0)-[newView(100)]&amp;quot;, options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
+    view.addConstraints(verticalConstraints)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;используя-autoresizing-mask&#34;&gt;Используя Autoresizing mask&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0))
+    newView.backgroundColor = UIColor.redColor()
+
+    newView.translatesAutoresizingMaskIntoConstraints = true
+
+    newView.center = CGPointMake(view.bounds.midX, view.bounds.midY)
+    newView.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin, UIViewAutoresizing.FlexibleTopMargin, UIViewAutoresizing.FlexibleBottomMargin]
+
+    view.addSubview(newView)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;используя-anchor-только-для-ios-9&#34;&gt;Используя Anchor(только для iOS 9)&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    newView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(newView)
+
+    let horizontalConstraint = newView.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor)
+    let vertivalConstraint = newView.centerYAnchor.constraintEqualToAnchor(view.centerYAnchor)
+    let widthConstraint = newView.widthAnchor.constraintEqualToAnchor(nil, constant: 100)
+    let heightConstraint = newView.heightAnchor.constraintEqualToAnchor(nil, constant: 100)
+    NSLayoutConstraint.activateConstraints([horizontalConstraint, vertivalConstraint, widthConstraint, heightConstraint])
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Представленный код работает для swift 2.&lt;/p&gt;
 </description>
     </item>
     

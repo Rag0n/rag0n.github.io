@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Как программно добавить Autolayout constraints  &middot; Developer&#39;s adventures</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="iOS предоставляет большую гибкость в плане конструирования разметки интерфейса под различные девайсы. Например, если мы хотим, чтобы кастомная UIView со стороной 100 находилась в центре экрана, то мы можем сделать это пятью способами:" />
+
+<meta name="keywords" content="autolayout constraints, добавление autolayout constraints, ">
+
+
+<meta property="og:title" content="Как программно добавить Autolayout constraints  &middot; Developer&#39;s adventures ">
+<meta property="og:site_name" content="Developer&#39;s adventures"/>
+<meta property="og:url" content="http://rag0n.github.io/2015/10/24/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/" />
+<meta property="og:locale" content="ru">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="iOS предоставляет большую гибкость в плане конструирования разметки интерфейса под различные девайсы. Например, если мы хотим, чтобы кастомная UIView со стороной 100 находилась в центре экрана, то мы можем сделать это пятью способами:"/>
+<meta property="og:article:published_time" content="2015-10-24T12:42:12&#43;03:00" />
+<meta property="og:article:modified_time" content="2015-10-24T12:42:12&#43;03:00" />
+
+  
+    
+<meta property="og:article:tag" content="autolayout constraints">
+    
+<meta property="og:article:tag" content="добавление autolayout constraints">
+    
+  
+
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Как программно добавить Autolayout constraints",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2015-10-24",
+    "description": "iOS предоставляет большую гибкость в плане конструирования разметки интерфейса под различные девайсы. Например, если мы хотим, чтобы кастомная UIView со стороной 100 находилась в центре экрана, то мы можем сделать это пятью способами:",
+    "wordCount":  342 
+  }
+</script>
+
+
+
+<link rel="canonical" href="http://rag0n.github.io/2015/10/24/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://rag0n.github.io/touch-icon-144-precomposed.png">
+<link href="http://rag0n.github.io/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.14" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link href='https://fonts.googleapis.com/css?family=Merriweather:300%7CRaleway%7COpen+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="http://rag0n.github.io/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://rag0n.github.io/css/style.css">
+<link rel="stylesheet" href="http://rag0n.github.io/css/highlight/solarized_dark.css">
+
+  
+</head>
+<body>
+  <main id="main-wrapper" class="container main_wrapper has-sidebar right">
+    <header id="main-header" class="container main_header">
+  <div class="container brand">
+  <div class="container title h1-like">
+  <a class="baselink" href="http://rag0n.github.io/">
+  Alexander Guschin
+
+</a>
+
+</div>
+
+  
+<div class="container topline">
+  
+  Notes about my dev adventures
+
+
+</div>
+
+
+</div>
+
+  <nav class="container nav primary no-print">
+  
+
+<a class="homelink" href="http://rag0n.github.io/">Blog</a>
+
+
+  
+<a href="http://rag0n.github.io/about" title="About me">About</a>
+
+<a href="http://rag0n.github.io/tags" title="Show list of tags">Tags</a>
+
+
+</nav>
+
+<div class="container nav secondary no-print">
+  
+<a id="contact-link-email" class="contact_link" href="mailto:alexander.ragon@gmail.com">
+  <span class="fa fa-envelope-square"></span><span>email</span></a>
+
+
+
+<a id="contact-link-github" class="contact_link" href="https://github.com/Rag0n">
+  <span class="fa fa-github-square"></span><span>github</span></a>
+
+
+
+<a id="contact-link-bitbucket" class="contact_link" href="https://bitbucket.org/Rag0n">
+  <span class="fa fa-bitbucket-square"></span><span>bitbucket</span></a>
+
+
+
+<a id="contact-link-linkedin" class="contact_link" href="fr.linkedin.com/in/alexanderguschin">
+  <span class="fa fa-linkedin-square"></span><span>linkedin</span></a>
+
+
+
+
+
+
+
+
+
+<a id="contact-link-youtube" class="contact_link" href="https://www.youtube.com/channel/UC3lJRhdqaLohrPwVJdNCPbQ">
+  <span class="fa fa-youtube-square"></span><span>youtube</span></a>
+
+
+
+
+
+</div>
+
+
+  
+
+</header>
+
+
+<article id="main-content" class="container main_content single">
+  <header class="container hat">
+  <h1>Как программно добавить Autolayout constraints
+</h1>
+
+  <div class="metas">
+<time datetime="2015-10-24">24 Oct, 2015</time>
+
+
+  
+    &middot; by rag0n
+  
+  &middot; Read in about 2 min
+  &middot; (342 Words)
+  <br>
+  
+<a class="label" href="http://rag0n.github.io/tags/swift">swift</a>
+
+<a class="label" href="http://rag0n.github.io/tags/ios">iOS</a>
+
+
+
+</div>
+
+</header>
+
+  <div class="container content">
+  
+
+<h3 id="используя-классический-способ">Используя классический способ</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    newView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(newView)
+
+    let horizontalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
+    view.addConstraint(horizontalConstraint)
+
+    let verticalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
+    view.addConstraint(verticalConstraint)
+
+    let widthConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
+    newView.addConstraint(widthConstraint)
+    // view.addConstraint(widthConstraint) // работает аналогично
+
+    let heightConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
+    newView.addConstraint(heightConstraint)
+    // view.addConstraint(heightConstraint) // работает аналогично
+}
+</code></pre>
+
+<h3 id="используя-смешанный-способ-классический-visual-format-language">Используя смешанный способ(Классический + Visual Format Language)</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    newView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(newView)
+
+    let horizontalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
+    view.addConstraint(horizontalConstraint)
+
+    let verticalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
+    view.addConstraint(verticalConstraint)
+
+    let views = [&quot;newView&quot;: newView]
+
+    let widthConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&quot;H:[newView(100)]&quot;, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+    newView.addConstraints(widthConstraints)
+    // view.addConstraints(widthConstraints) // работает аналогично
+
+    let heightConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&quot;V:[newView(100)]&quot;, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+    newView.addConstraints(heightConstraints)
+    // view.addConstraints(heightConstraints) // работает аналогично
+
+}
+</code></pre>
+
+<h3 id="используя-только-visual-format-language">Используя только Visual Format Language</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    newView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(newView)
+
+    let views = [&quot;view&quot;: view, &quot;newView&quot;: newView]
+    let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&quot;H:[view]-(&lt;=0)-[newView(100)]&quot;, options: NSLayoutFormatOptions.AlignAllCenterY, metrics: nil, views: views)
+    view.addConstraints(horizontalConstraints)
+    let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&quot;V:[view]-(&lt;=0)-[newView(100)]&quot;, options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
+    view.addConstraints(verticalConstraints)
+}
+</code></pre>
+
+<h3 id="используя-autoresizing-mask">Используя Autoresizing mask</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0))
+    newView.backgroundColor = UIColor.redColor()
+
+    newView.translatesAutoresizingMaskIntoConstraints = true
+
+    newView.center = CGPointMake(view.bounds.midX, view.bounds.midY)
+    newView.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin, UIViewAutoresizing.FlexibleTopMargin, UIViewAutoresizing.FlexibleBottomMargin]
+
+    view.addSubview(newView)
+}
+</code></pre>
+
+<h3 id="используя-anchor-только-для-ios-9">Используя Anchor(только для iOS 9)</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    newView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(newView)
+
+    let horizontalConstraint = newView.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor)
+    let vertivalConstraint = newView.centerYAnchor.constraintEqualToAnchor(view.centerYAnchor)
+    let widthConstraint = newView.widthAnchor.constraintEqualToAnchor(nil, constant: 100)
+    let heightConstraint = newView.heightAnchor.constraintEqualToAnchor(nil, constant: 100)
+    NSLayoutConstraint.activateConstraints([horizontalConstraint, vertivalConstraint, widthConstraint, heightConstraint])
+}
+</code></pre>
+
+<p>Представленный код работает для swift 2.</p>
+
+</div>
+
+
+  <footer class="container">
+  <div class="container navigation no-print">
+  <h2>Navigation</h2>
+  
+  
+
+
+</div>
+
+  <div class="container comments">
+  <h2>Comments</h2>
+  
+
+</div>
+
+</footer>
+
+</article>
+      <footer id="main-footer" class="container main_footer">
+  
+
+  <div class="container nav foot no-print">
+  
+
+  <a class="toplink" href="#">back to top</a>
+
+</div>
+
+  <div class="container credits">
+  
+<div class="container footline">
+  
+  <i class='fa fa-code'></i> Keep calm and carry on coding
+
+
+</div>
+
+
+  
+<div class="container copyright">
+  
+  &copy; 2015 Rag0n
+
+
+</div>
+
+
+</div>
+
+</footer>
+
+    </main>
+    
+
+
+<script src="http://rag0n.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+    
+  </body>
+</html>
+

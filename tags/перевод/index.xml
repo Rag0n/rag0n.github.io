@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Developer&#39;s adventures</title>
-    <link>http://rag0n.github.io/</link>
-    <description>Recent content on Developer&#39;s adventures</description>
+    <title>Перевод on Developer&#39;s adventures</title>
+    <link>http://localhost:1313/tags/%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D0%B4/</link>
+    <description>Recent content in Перевод on Developer&#39;s adventures</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru</language>
     <managingEditor>alexander.ragon@gmail.com (Alexander Guschin)</managingEditor>
     <webMaster>alexander.ragon@gmail.com (Alexander Guschin)</webMaster>
     <copyright>(c) 2015 Rag0n</copyright>
     <lastBuildDate>Sat, 24 Oct 2015 12:42:12 +0300</lastBuildDate>
-    <atom:link href="http://rag0n.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D0%B4/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Как программно добавить Autolayout constraints</title>
-      <link>http://rag0n.github.io/2015/10/24/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/</link>
+      <link>http://localhost:1313/2015/10/24/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/</link>
       <pubDate>Sat, 24 Oct 2015 12:42:12 +0300</pubDate>
       <author>alexander.ragon@gmail.com (Alexander Guschin)</author>
-      <guid>http://rag0n.github.io/2015/10/24/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/</guid>
+      <guid>http://localhost:1313/2015/10/24/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/</guid>
       <description>
 
 &lt;h3 id=&#34;используя-классический-способ&#34;&gt;Используя классический способ&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
+&lt;pre&gt;&lt;code&gt;override func viewDidLoad() {
     super.viewDidLoad()
 
     let newView = UIView()
@@ -48,7 +48,7 @@
 
 &lt;h3 id=&#34;используя-смешанный-способ-классический-visual-format-language&#34;&gt;Используя смешанный способ(Классический + Visual Format Language)&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
+&lt;pre&gt;&lt;code&gt;override func viewDidLoad() {
     super.viewDidLoad()
 
     let newView = UIView()
@@ -62,13 +62,13 @@
     let verticalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
     view.addConstraint(verticalConstraint)
 
-    let views = [&amp;quot;newView&amp;quot;: newView]
+    let views = [«newView»: newView]
 
-    let widthConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&amp;quot;H:[newView(100)]&amp;quot;, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+    let widthConstraints = NSLayoutConstraint.constraintsWithVisualFormat(«H:[newView(100)]», options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
     newView.addConstraints(widthConstraints)
     // view.addConstraints(widthConstraints) // работает аналогично
 
-    let heightConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&amp;quot;V:[newView(100)]&amp;quot;, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+    let heightConstraints = NSLayoutConstraint.constraintsWithVisualFormat(«V:[newView(100)]», options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
     newView.addConstraints(heightConstraints)
     // view.addConstraints(heightConstraints) // работает аналогично
 
@@ -77,7 +77,7 @@
 
 &lt;h3 id=&#34;используя-только-visual-format-language&#34;&gt;Используя только Visual Format Language&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
+&lt;pre&gt;&lt;code&gt;override func viewDidLoad() {
     super.viewDidLoad()
 
     let newView = UIView()
@@ -85,17 +85,17 @@
     newView.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(newView)
 
-    let views = [&amp;quot;view&amp;quot;: view, &amp;quot;newView&amp;quot;: newView]
-    let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&amp;quot;H:[view]-(&amp;lt;=0)-[newView(100)]&amp;quot;, options: NSLayoutFormatOptions.AlignAllCenterY, metrics: nil, views: views)
+    let views = [«view»: view, «newView»: newView]
+    let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(«H:[view]-(&amp;lt;=0)-[newView(100)]», options: NSLayoutFormatOptions.AlignAllCenterY, metrics: nil, views: views)
     view.addConstraints(horizontalConstraints)
-    let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&amp;quot;V:[view]-(&amp;lt;=0)-[newView(100)]&amp;quot;, options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
+    let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(«V:[view]-(&amp;lt;=0)-[newView(100)]», options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
     view.addConstraints(verticalConstraints)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;используя-autoresizing-mask&#34;&gt;Используя Autoresizing mask&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
+&lt;pre&gt;&lt;code&gt;override func viewDidLoad() {
     super.viewDidLoad()
 
     let newView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0))
@@ -112,7 +112,7 @@
 
 &lt;h3 id=&#34;используя-anchor-только-для-ios-9&#34;&gt;Используя Anchor(только для iOS 9)&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
+&lt;pre&gt;&lt;code&gt;override func viewDidLoad() {
     super.viewDidLoad()
 
     let newView = UIView()
@@ -129,24 +129,6 @@
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Представленный код работает для swift 2.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>about</title>
-      <link>http://rag0n.github.io/about/</link>
-      <pubDate>Sun, 18 Oct 2015 19:52:04 +0300</pubDate>
-      <author>alexander.ragon@gmail.com (Alexander Guschin)</author>
-      <guid>http://rag0n.github.io/about/</guid>
-      <description>&lt;hr /&gt;
-
-&lt;p&gt;Hi, I&amp;rsquo;m Alexander! I&amp;rsquo;m a software developer living in Saint-Petersburg.&lt;/p&gt;
-
-&lt;p&gt;Currently I&amp;rsquo;m developing iOS apps using Swift language. Some of them you can find on my &lt;a href=&#34;https://github.com/Rag0n&#34;&gt;GitHub page&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;m spending a lot of time on studying programming stuff and now I&amp;rsquo;m participating in &lt;a href=&#34;https://github.com/open-source-society/computer-science&#34;&gt;Open Source Society University&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Feel free to contact.&lt;/p&gt;
 </description>
     </item>
     
