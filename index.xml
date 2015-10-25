@@ -128,7 +128,47 @@
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Представленный код работает для swift 2.&lt;/p&gt;
+&lt;h3 id=&#34;используя-snapkit-сторонее-по&#34;&gt;Используя SnapKit(сторонее ПО)&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    view.addSubview(newView)
+    
+    newView.snp_makeConstraints { (make) -&amp;gt; Void in
+        make.centerX.equalTo(view)
+        make.centerY.equalTo(view)
+        make.width.equalTo(100)
+        make.height.equalTo(100)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;В этом случае не требуется ни newView.translatesAutoresizingMaskIntoConstraints = false, ни активация constraints.&lt;/p&gt;
+
+&lt;h3 id=&#34;используя-cartography-стороннее-по&#34;&gt;Используя Cartography(стороннее ПО)&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    view.addSubview(newView)
+    
+    constrain(newView, view) { (newView, view) -&amp;gt; () in
+        newView.centerX == view.centerX
+        newView.centerY == view.centerY
+        newView.width == 100
+        newView.height == 100
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Данная библиотека использует декларативный стиль программирования, т.е она описывает каков объект, а не как его отображать.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;P.S&lt;/strong&gt; Представленный код работает для swift 2.&lt;/p&gt;
 </description>
     </item>
     

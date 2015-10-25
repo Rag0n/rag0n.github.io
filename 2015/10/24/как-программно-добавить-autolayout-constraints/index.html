@@ -49,7 +49,7 @@
     },
     "datePublished": "2015-10-24",
     "description": "iOS предоставляет большую гибкость в плане конструирования разметки интерфейса под различные девайсы. Например, если мы хотим, чтобы кастомная UIView со стороной 100 находилась в центре экрана, то мы можем сделать это пятью способами:",
-    "wordCount":  342 
+    "wordCount":  437 
   }
 </script>
 
@@ -166,8 +166,8 @@
   
     &middot; by rag0n
   
-  &middot; Read in about 2 min
-  &middot; (342 Words)
+  &middot; Read in about 3 min
+  &middot; (437 Words)
   <br>
   
 <a class="label" href="http://rag0n.github.io/tags/swift">swift</a>
@@ -291,7 +291,47 @@
 }
 </code></pre>
 
-<p>Представленный код работает для swift 2.</p>
+<h3 id="используя-snapkit-сторонее-по">Используя SnapKit(сторонее ПО)</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    view.addSubview(newView)
+    
+    newView.snp_makeConstraints { (make) -&gt; Void in
+        make.centerX.equalTo(view)
+        make.centerY.equalTo(view)
+        make.width.equalTo(100)
+        make.height.equalTo(100)
+    }
+}
+</code></pre>
+
+<p>В этом случае не требуется ни newView.translatesAutoresizingMaskIntoConstraints = false, ни активация constraints.</p>
+
+<h3 id="используя-cartography-стороннее-по">Используя Cartography(стороннее ПО)</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    view.addSubview(newView)
+    
+    constrain(newView, view) { (newView, view) -&gt; () in
+        newView.centerX == view.centerX
+        newView.centerY == view.centerY
+        newView.width == 100
+        newView.height == 100
+    }
+}
+</code></pre>
+
+<p>Данная библиотека использует декларативный стиль программирования, т.е она описывает каков объект, а не как его отображать.</p>
+
+<p><strong>P.S</strong> Представленный код работает для swift 2.</p>
 
 </div>
 
