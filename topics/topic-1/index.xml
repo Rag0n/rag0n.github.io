@@ -9,8 +9,121 @@
     <managingEditor>alexander.ragon@gmail.com (Alexander Guschin)</managingEditor>
     <webMaster>alexander.ragon@gmail.com (Alexander Guschin)</webMaster>
     <copyright>(c) 2015 Rag0n</copyright>
-    <lastBuildDate>Wed, 28 Oct 2015 09:34:02 +0300</lastBuildDate>
+    <lastBuildDate>Tue, 01 Dec 2015 17:54:00 +0300</lastBuildDate>
     <atom:link href="http://rag0n.github.io/topics/topic-1/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Swift Design Patterns: Strategy</title>
+      <link>http://rag0n.github.io/2015/12/01/swift-design-patterns-strategy/</link>
+      <pubDate>Tue, 01 Dec 2015 17:54:00 +0300</pubDate>
+      <author>alexander.ragon@gmail.com (Alexander Guschin)</author>
+      <guid>http://rag0n.github.io/2015/12/01/swift-design-patterns-strategy/</guid>
+      <description>
+
+&lt;h3 id=&#34;зачем-нужен&#34;&gt;Зачем нужен?&lt;/h3&gt;
+
+&lt;p&gt;Паттерн Strategy применяется для уменьшения связанности. В двух словах: программируйте на уровне интерфейсов, а не реализаций.&lt;/p&gt;
+
+&lt;p&gt;Соответствует open/closed принципу SOLID: изменение конкретных классов не влияет на клиента, т.к он зависит только от интерфейса.&lt;/p&gt;
+
+&lt;h3 id=&#34;определение&#34;&gt;Определение&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;определяет семейство алгоритмов(поведений), инкапсулирует и обеспечивает их взаимозаменяемость. Позволяет модифицировать алгоритмы независимо от их использования на стороне клиента.&lt;/li&gt;
+&lt;li&gt;инкапсулируем абстракцию в интерфейсе, скрываем реализацию в конкретных классах&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;реализация&#34;&gt;Реализация&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Найдите алгоритм(поведение)&lt;/li&gt;
+&lt;li&gt;Определите сигнатуру в супертипе(интерфейсе/абстрактном классе/протоколе)&lt;/li&gt;
+&lt;li&gt;Скройте реализацию(или реализации) в конкретном классе, который соответствует этому интерфейсу&lt;/li&gt;
+&lt;li&gt;Свяжите клиента алгоритма с интерфейсом&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;пример&#34;&gt;Пример&lt;/h3&gt;
+
+&lt;p&gt;Допустим у нас есть утки. Утки могут крякать по разному: кряканье, писк, а могут и вовсе не крякать. Алгоритмом в данном случае будет способ кряканья.&lt;/p&gt;
+
+&lt;p&gt;Теперь определим сигнатуру:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// в качестве супертипа - протокол(интерфейс)
+protocol QuackBehavior {
+    func quack()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Скроем реализацию в конкретных классах:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// конкретные классы поведения, описываемые супертипом
+class Quack: QuackBehavior {
+    func quack() {
+        print(&amp;quot;Я крякаю: quack-quack&amp;quot;)
+    }
+}
+
+class QuackMute: QuackBehavior {
+    func quack() {
+        print(&amp;quot;Я не крякаю :(&amp;quot;)
+    }
+}
+
+class Squeak: QuackBehavior {
+    func quack() {
+        print(&amp;quot;Я пищу: squeak-squeak&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Свяжем клиента(в нашем случае - утку) с интерфейсом:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;class Duck {
+    // Клиент Duck связан с абстракцией, а не с конкретными реализациями
+    private var quackBehavior: QuackBehavior
+    
+    required convenience init() {
+        self.init(quackBehavior: QuackMute())
+    }
+    
+    private init(quackBehavior: QuackBehavior) {
+        self.quackBehavior = quackBehavior
+    }
+        
+    func performQuack() {
+        // делегируем поведение
+        quackBehavior.quack()
+    }
+        
+    func setQuackBehavior(quackBehavior: QuackBehavior) {
+        self.quackBehavior = quackBehavior
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;В данной реализации метод setQuackBehavior позволяет динамически изменять поведение.&lt;/p&gt;
+
+&lt;p&gt;В качестве другого примера можно рассмотреть магазин, который осуществляет доставку разными способами: самолетом, самолетом-экспресс, морем. В данном случае алгоритм - способ доставки. Конкретные классы перечислены выше. Изменения методов доставки(например, квадрокоптером) никак не повлияют на клиента.&lt;/p&gt;
+
+&lt;p&gt;Стоить заметить, что вместо создания конкретных классов можно применить протоколо-ориентированный подход, а точнее использование миксинов. Т.е создаем миксины(содержащие поведение), с помощью расширений протокола добавляем реализацию по умолчанию, далее конфигурируем конкретные классы с необходимым набором поведений. В результате дублирования кода не будет.&lt;/p&gt;
+
+&lt;h4 id=&#34;подробнее-про-протоколо-ориентированный-подход&#34;&gt;Подробнее про протоколо-ориентированный подход:&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://swiftbook.ru/blog/introducing-protocol-oriented-programming-in-swift-2&#34;&gt;Знакомство с протоколо-ориентированным программированием в Swift 2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raywenderlich.com/109156/introducing-protocol-oriented-programming-in-swift-2&#34;&gt;Introducing Protocol-Oriented Programming in Swift 2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://code.tutsplus.com/tutorials/protocol-oriented-programming-in-swift-2--cms-24979&#34;&gt;Protocol-Oriented Programming in Swift 2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://alisoftware.github.io/swift/protocol/2015/11/08/mixins-over-inheritance/#fnref2&#34;&gt;Mixins over Inheritance&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;реализация-паттерна-strategy&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Strategy.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ochococo/Design-Patterns-In-Swift#-strategy&#34;&gt;Swift design patterns&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Лучшие практики swift (часть 1)</title>
