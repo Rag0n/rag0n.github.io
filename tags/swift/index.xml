@@ -9,8 +9,139 @@
     <managingEditor>alexander.ragon@gmail.com (Alexander Guschin)</managingEditor>
     <webMaster>alexander.ragon@gmail.com (Alexander Guschin)</webMaster>
     <copyright>(c) 2015 Rag0n</copyright>
-    <lastBuildDate>Tue, 01 Dec 2015 17:54:00 +0300</lastBuildDate>
+    <lastBuildDate>Fri, 04 Dec 2015 13:07:09 +0300</lastBuildDate>
     <atom:link href="http://rag0n.github.io/tags/swift/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Swift Design Patterns: Observer</title>
+      <link>http://rag0n.github.io/2015/12/04/swift-design-patterns-observer/</link>
+      <pubDate>Fri, 04 Dec 2015 13:07:09 +0300</pubDate>
+      <author>alexander.ragon@gmail.com (Alexander Guschin)</author>
+      <guid>http://rag0n.github.io/2015/12/04/swift-design-patterns-observer/</guid>
+      <description>
+
+&lt;h3 id=&#34;зачем-нужен&#34;&gt;Зачем нужен?&lt;/h3&gt;
+
+&lt;p&gt;Паттерн Observer часто применяется для определения бизнес-логики(data model) в субъекте и делегирования view функций различным несвязанным наблюдателям. Т.е применяется во &amp;laquo;View&amp;raquo; части паттерна MVC.&lt;/p&gt;
+
+&lt;p&gt;Существует две реализации:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;pull(получение) изменений наблюдателем через геттер-методы&lt;/li&gt;
+&lt;li&gt;pushing - активная доставка от субьекта&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Соответствует Dependency Inversion принципу SOLID: субьект зависит не от наблюдателей, а от интерфейса Observer. Т.о наблюдателями могут быть любые объекты, реализующие данный интерфейс. В результате получаем слабую связанность(low coupling) между объектами.&lt;/p&gt;
+
+&lt;h3 id=&#34;определение&#34;&gt;Определение&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;определяет отношение один-ко-многим таким образом, что при изменении состояния одного объекта происходит оповещение и обновление всех остальных зависимых объектов&lt;/li&gt;
+&lt;li&gt;инкапсулирует основные(независимые) компоненты в абстракции Subject и изменяющиеся(опциональные) компоненты в Observers.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;реализация&#34;&gt;Реализация&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Разграничьте независимую(базовую, core) функциональность и зависимую(или опциональную) функциональность&lt;/li&gt;
+&lt;li&gt;Смодулируйте независимую функциональность внутри subject&lt;/li&gt;
+&lt;li&gt;Смодулируйте зависимую функциональность внутри observers(наблюдателей)&lt;/li&gt;
+&lt;li&gt;Свяжите subject с интерфейсом observer&lt;/li&gt;
+&lt;li&gt;Наблюдатели регистрирует себя самостоятельно&lt;/li&gt;
+&lt;li&gt;Субъект пересылает сообщение об изменении состояния всем наблюдателям&lt;/li&gt;
+&lt;li&gt;Субьект может выполнить активную доставку или наблюдатели могут сами получать необходимую информацию&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;пример&#34;&gt;Пример&lt;/h3&gt;
+
+&lt;p&gt;В качестве примера: допустим у нас есть метеостанция, которая вызывает метод measurementsChanged у класса WeatherData при изменении температуры/влажности/давления.&lt;/p&gt;
+
+&lt;p&gt;Определяем независимую функциональность внутри subject:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;class WeatherData: Subject {
+    private var temperature: Double!
+    private var humidity: Double!
+    private var pressure: Double!
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Определяем зависимую функциональность внутри наблюдателей:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;class CurrentConditionsDisplay: Observer, DisplayElement {
+    private var temperature: Double!
+    private var pressure: Double!
+    
+    // зависимая функциональность в данном случае это
+    // представление температуры и давления в UI
+    func display() {
+        print(&amp;quot;Temperature = \(temperature), pressure = \(pressure)&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Свяжем subject с observers:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;class WeatherData: Subject {
+    private var observers = [Observer]()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Метеостанция посылает сообщения при изменении своего состояния:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;class WeatherData: Subject {
+    func notifyObservers() {
+        for observer in observers {
+            // активная доставка
+            observer.update(temperature: temperature, humidity: humidity, pressure: pressure)
+        }
+    }
+    
+    // вызов этой функции происходит извне при изменении данных(состояния)
+    func measurementsChanged() {
+        notifyObservers()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Наблюдатель получает изменения с помощью активной доставки:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;class WeatherData: Subject {
+    func notifyObservers() {
+        for observer in observers {
+            // активная доставка
+            observer.update(temperature: temperature, humidity: humidity, pressure: pressure)
+        }
+    }
+    
+    // вызов этой функции происходит извне при изменении данных(состояния)
+    func measurementsChanged() {
+        notifyObservers()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Зарегистрируем CurrentConditionsDisplay в качестве наблюдателя за метеостанцией:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;class CurrentConditionsDisplay: Observer, DisplayElement {
+    // humidity нас не интересует, но доставка активная - принимаем все параметры
+    func update(temperature temperature: Double, humidity: Double, pressure: Double) {
+        self.temperature = temperature
+        self.pressure = pressure
+        display()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;В данной реализации мы используем протокол DisplayElement, т.к предполагаем что у нас имеется несколько классов которые по разному представляют данные.&lt;/p&gt;
+
+&lt;h4 id=&#34;реализация-паттерна-strategy&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Observer.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ochococo/Design-Patterns-In-Swift#-observer&#34;&gt;Swift design patterns&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Swift Design Patterns: Strategy</title>
