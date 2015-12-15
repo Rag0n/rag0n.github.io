@@ -9,8 +9,178 @@
     <managingEditor>alexander.ragon@gmail.com (Alexander Guschin)</managingEditor>
     <webMaster>alexander.ragon@gmail.com (Alexander Guschin)</webMaster>
     <copyright>(c) 2015 Rag0n</copyright>
-    <lastBuildDate>Fri, 04 Dec 2015 13:07:09 +0300</lastBuildDate>
+    <lastBuildDate>Tue, 15 Dec 2015 12:31:52 +0300</lastBuildDate>
     <atom:link href="http://rag0n.github.io/tags/swift/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Swift Design Patterns: Decorator</title>
+      <link>http://rag0n.github.io/2015/12/15/swift-design-patterns-decorator/</link>
+      <pubDate>Tue, 15 Dec 2015 12:31:52 +0300</pubDate>
+      <author>alexander.ragon@gmail.com (Alexander Guschin)</author>
+      <guid>http://rag0n.github.io/2015/12/15/swift-design-patterns-decorator/</guid>
+      <description>
+
+&lt;h3 id=&#34;зачем-нужен&#34;&gt;Зачем нужен?&lt;/h3&gt;
+
+&lt;p&gt;Паттерн Decorator применяется для динамического добавления поведения или состояния объектам. Наследования не является допустимой альтернативой, т.к оно статично(этап компиляции) и применяется ко всему классу.&lt;/p&gt;
+
+&lt;p&gt;Соответствует open/closed принципу SOLID: класс открыт для расширения, но закрыт для изменения&lt;/p&gt;
+
+&lt;h3 id=&#34;определение&#34;&gt;Определение&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;динамически наделяет объект новыми возможностями и является гибкой альтернативой наследованию в области расширения функциональности&lt;/li&gt;
+&lt;li&gt;декорирование базового объекта путем рекурсивного завертывания(wrapping) дополнений, определяемых пользователем&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;реализация&#34;&gt;Реализация&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Определите общий интерфейс(таким образом классы будут взаимозаменяемы)&lt;/li&gt;
+&lt;li&gt;Создайте класс основного компонента(наследует общий интерфейс)&lt;/li&gt;
+&lt;li&gt;Создайте базовый класс декоратора(наследует общий интерфейс)&lt;/li&gt;
+&lt;li&gt;У декоратора с помощью композиции объявите переменную типа общего интерфейса&lt;/li&gt;
+&lt;li&gt;Инициализируйте этот объект в инициализаторе декоратора&lt;/li&gt;
+&lt;li&gt;У декоратора делегируйте методы общего интерфейса этому объекту&lt;/li&gt;
+&lt;li&gt;Создайте конкретные классы декоратора для каждого дополнения&lt;/li&gt;
+&lt;li&gt;Конкретные классы декоратора делегируют поведение базовому классу декоратора + добавляют свое&lt;/li&gt;
+&lt;li&gt;Клиент конфигурирует тип и порядок базового и дополнительных компонентов&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;пример&#34;&gt;Пример&lt;/h3&gt;
+
+&lt;p&gt;Допустим мы владеем кафе и у нас в продаже имеются различные виды кофе:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;кофе темной обжарки&lt;/li&gt;
+&lt;li&gt;кофе с шоколадом&lt;/li&gt;
+&lt;li&gt;кофе со взбитыми сливками&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Можно реализовать базовый класс кофе и наследовать различные варианты и комбинации конкретный типов кофе, т.о получим такой набор классов:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;базовый класс кофе&lt;/li&gt;
+&lt;li&gt;кофе темной обжарки&lt;/li&gt;
+&lt;li&gt;кофе темной обжарки с шоколадом&lt;/li&gt;
+&lt;li&gt;кофе темной обжарки со взбитыми сливками&lt;/li&gt;
+&lt;li&gt;кофе темной обжарки с шоколадом и взбитыми сливками&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&amp;hellip;&amp;hellip;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Другой способ решения - применение декоратора:
+инкапсулируем исходный объект в интерфейсе, наследуем полученный интерфейс и основным объектом, и декоратором. При этом добавляем с помощью композиции переменную с типом интерфейса декоратору и переопределяем методы на использование делегирования. Создаем конкретные дополнения, делегируем базовому декоратору и добавляем конкретное поведение.&lt;/p&gt;
+
+&lt;p&gt;Определяем общий интерфейс&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// абстрактный компонент, общий интерфейс
+protocol Beverage {
+    func cost() -&amp;gt; Double
+    func description() -&amp;gt; String
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Создаем классы основных компонентов&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// конкретный компонент
+class Espresso: Beverage {
+    func description() -&amp;gt; String {
+        return &amp;quot;Espresso&amp;quot;
+    }
+    
+    func cost() -&amp;gt; Double {
+        return 1.99
+    }
+}
+
+// конкретный компонент
+class DarkRoast: Beverage {
+    func description() -&amp;gt; String {
+        return &amp;quot;Dark Roast&amp;quot;
+    }
+    
+    func cost() -&amp;gt; Double {
+        return 2.99
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Создаем базовый класс декоратора, с помощью композиции объявляем переменную типа общего интерфейса, инициализируем переменную в инициализаторе и делегируем методы общего интерфейса(пункты 3, 4, 5, 6)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// абстрактный декоратор
+class CondimentDecorator: Beverage {
+    private var decoratedBeverage: Beverage
+    
+    init(beverage: Beverage) {
+        decoratedBeverage = beverage
+    }
+    
+    func description() -&amp;gt; String {
+        return decoratedBeverage.description()
+    }
+    
+    func cost() -&amp;gt; Double {
+        return decoratedBeverage.cost()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Создаем конкретные классы декоратора, делегируем поведение базовому декоратору и добавляем свое(пункты 7, 8)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// конкретное дополнение
+class Mocha: CondimentDecorator {
+    override func description() -&amp;gt; String {
+        return super.description() + &amp;quot;, Mocha&amp;quot;
+    }
+    
+    override func cost() -&amp;gt; Double {
+        return super.cost() + 0.5
+    }
+}
+
+// конкретное дополнение
+class Whip: CondimentDecorator {
+    override func description() -&amp;gt; String {
+        return super.description() + &amp;quot;, Whip&amp;quot;
+    }
+    
+    override func cost() -&amp;gt; Double {
+        return super.cost() + 0.2
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Конфигурируем нужный объект, комбинируя основной компонент и дополнения&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;var myEspresso:Beverage = Espresso()
+// Espresso 1.99
+
+var myDarkRoast:Beverage = DarkRoast()
+// Dark Roast 2.99
+
+myDarkRoast = Mocha(beverage: myDarkRoast)
+myDarkRoast = Mocha(beverage: myDarkRoast)
+myDarkRoast = Whip(beverage: myDarkRoast)
+// Dark Roast, Mocha, Mocha, Whip 4.19
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;В качестве еще одного примера:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;базовый объект - новогодняя елка&lt;/li&gt;
+&lt;li&gt;класс декоратора - украшения&lt;/li&gt;
+&lt;li&gt;конкретные классы декоратора - игрушки, гирлянда и тд&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;реализация-паттерна-strategy&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Decorator.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ochococo/Design-Patterns-In-Swift#-decorator&#34;&gt;Swift design patterns&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Swift Design Patterns: Observer</title>
