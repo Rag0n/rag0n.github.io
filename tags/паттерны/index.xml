@@ -9,8 +9,280 @@
     <managingEditor>alexander.ragon@gmail.com (Alexander Guschin)</managingEditor>
     <webMaster>alexander.ragon@gmail.com (Alexander Guschin)</webMaster>
     <copyright>(c) 2015 Rag0n</copyright>
-    <lastBuildDate>Tue, 15 Dec 2015 12:31:52 +0300</lastBuildDate>
+    <lastBuildDate>Wed, 16 Dec 2015 17:15:56 +0300</lastBuildDate>
     <atom:link href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Swift Design Patterns: Factory Method</title>
+      <link>http://rag0n.github.io/2015/12/16/swift-design-patterns-factory-method/</link>
+      <pubDate>Wed, 16 Dec 2015 17:15:56 +0300</pubDate>
+      <author>alexander.ragon@gmail.com (Alexander Guschin)</author>
+      <guid>http://rag0n.github.io/2015/12/16/swift-design-patterns-factory-method/</guid>
+      <description>
+
+&lt;h3 id=&#34;зачем-нужен:a101eda76dab66e01165dbf941fe4575&#34;&gt;Зачем нужен?&lt;/h3&gt;
+
+&lt;p&gt;Паттерн Factory method применяется когда создатель(фреймворк) должен стандартизировать архитектурную модель для клиентов и одновременно позволить клиентам определять свои объекты предметной области(domain objets).&lt;/p&gt;
+
+&lt;p&gt;Обеспечивает соблюдение принципа инверсии зависимостей. Уменьшает связанность классов.&lt;/p&gt;
+
+&lt;h3 id=&#34;определение:a101eda76dab66e01165dbf941fe4575&#34;&gt;Определение&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;определяет интерфейс создания объекта, но позволяет субклассам выбрать класс создаваемого экземпляра. Таким образом, Фабричный метод делегирует операцию создания экземпляра субклассам.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;реализация:a101eda76dab66e01165dbf941fe4575&#34;&gt;Реализация&lt;/h3&gt;
+
+&lt;p&gt;Суперкласс определяет стандартное поведение и делегирует детали создания субклассам, определенным пользователем. Для создания объектов используется наследование.&lt;/p&gt;
+
+&lt;p&gt;Существует несколько реализаций:
+статичный метод(вместо метода инициализации) или
+абстрактный метод(реализация определяется подклассами)&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Спроектируйте аргументы фабричного метода(по каким харектиристикам фабричный метод будет выбирать конкретный продукт)&lt;/li&gt;
+&lt;li&gt;Объявите констуктуры приватными или защищенными&lt;/li&gt;
+&lt;li&gt;Рассмотрите возможность создания внутреннего &amp;laquo;object pool&amp;raquo;, который позволит возвращать один и тот же экземпляр, вместо создания нового каждый раз&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;пример:a101eda76dab66e01165dbf941fe4575&#34;&gt;Пример&lt;/h3&gt;
+
+&lt;p&gt;Фабричный метод похож на абстрактную фабрику, но в нем отсутствует акцент на семействах.&lt;/p&gt;
+
+&lt;p&gt;Допустим у нас есть сеть пиццерий по всей стране. В Нью-Йорке жители любят тонкий слой теста, немного специй. В Чикаго - толстый слой теста, много сыра.&lt;/p&gt;
+
+&lt;p&gt;Мы хотим, чтобы процесс приготовления был стандартизирован и одинаков во всех пиццерий, но при этом учитывались особенности местных жителей.&lt;/p&gt;
+
+&lt;p&gt;Для этого объявим общий интерфейс для пиццерий, при этом делегируем реализацию фабричного метода субклассам:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// абстрактный класс создатель
+protocol PizzaStore {
+    func orderPizza(type: String) -&amp;gt; Pizza
+    // фабричный метод
+    func createPizza(type: String) -&amp;gt; Pizza
+}
+
+extension PizzaStore {
+    func orderPizza(type: String) -&amp;gt; Pizza {
+        // для создание пиццы используем фабричный метод
+        let pizza = createPizza(type)
+        
+        pizza.prepare()
+        pizza.bake()
+        pizza.cut()
+        pizza.box()
+        
+        return pizza
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Объявим конкретные пиццерии, учитывающие местные обычаи - для этого реализуем фабричный метод&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// конкретный класс-создатель
+class NYPizzaStore: PizzaStore {
+    
+    func createPizza(type: String) -&amp;gt; Pizza {
+        switch type {
+            case &amp;quot;cheese&amp;quot;:
+                return NYStyleCheesePizza()
+            case &amp;quot;veggie&amp;quot;:
+                return NYStyleVeggiePizza()
+            case &amp;quot;clam&amp;quot;:
+                return NYStyleClamPizza()
+            case &amp;quot;pepperoni&amp;quot;:
+                return NYStylePepperoniPizza()
+        default:
+            return NYStyleCheesePizza()
+        }
+    }
+}
+
+
+// конкретный класс-создатель
+class ChikagoPizzaStore: PizzaStore {
+    
+    func createPizza(type: String) -&amp;gt; Pizza {
+        switch type {
+        case &amp;quot;cheese&amp;quot;:
+            return ChikagoStyleCheesePizza()
+        case &amp;quot;veggie&amp;quot;:
+            return ChikagoStyleVeggiePizza()
+        case &amp;quot;clam&amp;quot;:
+            return ChikagoStyleClamPizza()
+        case &amp;quot;pepperoni&amp;quot;:
+            return ChikagoStylePepperoniPizza()
+        default:
+            return ChikagoStyleCheesePizza()
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Объявим абстрактный продукт и стандартизируем процесс приготовления&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// абстрактный продукт
+protocol Pizza {
+    var name: String { get }
+    var dough: String { get }
+    var sauce: String { get }
+    var toppings: [String] { get }
+    
+    func prepare()
+    
+    func bake()
+    
+    func cut()
+    
+    func box()
+}
+
+// добавляем реализацию по умолчанию
+extension Pizza {
+    
+    func prepare() {
+        print(&amp;quot;Preparing \(name)&amp;quot;)
+        print(&amp;quot;Tossing dough...&amp;quot;)
+        print(&amp;quot;Adding sauce&amp;quot;)
+        print(&amp;quot;Adding toppings \(toppings)&amp;quot;)
+    }
+    
+    func bake() {
+        print(&amp;quot;Bake for 25 minutes at 350&amp;quot;)
+    }
+    
+    func cut() {
+        print(&amp;quot;Cutting the pizza into diagonal slices&amp;quot;)
+    }
+    
+    func box() {
+        print(&amp;quot;Place pizza in the official PizzaStore box&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Создадим конкретные продукты&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// конкретные продукты
+class NYStyleCheesePizza: Pizza {
+    let name = &amp;quot;Ny style Sauce and Cheese Pizza&amp;quot;
+    let dough = &amp;quot;Thin Crust Dough&amp;quot;
+    let sauce = &amp;quot;Marinara Sauce&amp;quot;
+    let toppings = [&amp;quot;Grated Reggiano Cheese&amp;quot;]
+}
+
+class NYStyleVeggiePizza: Pizza {
+    let name = &amp;quot;Ny style Sauce and Veggie Pizza&amp;quot;
+    let dough = &amp;quot;Thin Crust Dough&amp;quot;
+    let sauce = &amp;quot;Marinara Sauce&amp;quot;
+    let toppings = [&amp;quot;Veggie&amp;quot;]
+}
+
+class NYStyleClamPizza: Pizza {
+    let name = &amp;quot;Ny style Sauce and Clam Pizza&amp;quot;
+    let dough = &amp;quot;Thin Crust Dough&amp;quot;
+    let sauce = &amp;quot;Marinara Sauce&amp;quot;
+    let toppings = [&amp;quot;Clam&amp;quot;]
+}
+
+class NYStylePepperoniPizza: Pizza {
+    let name = &amp;quot;Ny style Sauce and Pepperoni Pizza&amp;quot;
+    let dough = &amp;quot;Thin Crust Dough&amp;quot;
+    let sauce = &amp;quot;Marinara Sauce&amp;quot;
+    let toppings = [&amp;quot;Pepperoni&amp;quot;]
+}
+
+class ChikagoStyleCheesePizza: Pizza {
+    let name = &amp;quot;Chikago style Deep Dish Cheese Pizza&amp;quot;
+    let dough = &amp;quot;Extra Thick Crust Dough&amp;quot;
+    let sauce = &amp;quot;Plum Tomato Sauce&amp;quot;
+    let toppings = [&amp;quot;Shredded Mozarella Cheese&amp;quot;]
+    
+    func cut() {
+        print(&amp;quot;Cutting pizza into square slices&amp;quot;)
+    }
+}
+
+class ChikagoStyleVeggiePizza: Pizza {
+    let name = &amp;quot;Chikago style Deep Dish Veggie Pizza&amp;quot;
+    let dough = &amp;quot;Extra Thick Crust Dough&amp;quot;
+    let sauce = &amp;quot;Plum Tomato Sauce&amp;quot;
+    let toppings = [&amp;quot;Veggie&amp;quot;]
+    
+    func cut() {
+        print(&amp;quot;Cutting pizza into square slices&amp;quot;)
+    }
+}
+
+class ChikagoStyleClamPizza: Pizza {
+    let name = &amp;quot;Chikago style Deep Dish Clam Pizza&amp;quot;
+    let dough = &amp;quot;Extra Thick Crust Dough&amp;quot;
+    let sauce = &amp;quot;Plum Tomato Sauce&amp;quot;
+    let toppings = [&amp;quot;Clam&amp;quot;]
+    
+    func cut() {
+        print(&amp;quot;Cutting pizza into square slices&amp;quot;)
+    }
+}
+
+class ChikagoStylePepperoniPizza: Pizza {
+    let name = &amp;quot;Chikago style Deep Dish Pepperoni Pizza&amp;quot;
+    let dough = &amp;quot;Extra Thick Crust Dough&amp;quot;
+    let sauce = &amp;quot;Plum Tomato Sauce&amp;quot;
+    let toppings = [&amp;quot;Pepperoni&amp;quot;]
+    
+    func cut() {
+        print(&amp;quot;Cutting pizza into square slices&amp;quot;)
+    }
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Посетим пиццерию в Нью-Йорке и закажем сырную пиццу&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;let nyStore = NYPizzaStore()
+let NYPizza = nyStore.orderPizza(&amp;quot;cheese&amp;quot;)
+print(NYPizza.name)
+/*
+Preparing Ny style Sauce and Cheese Pizza
+Tossing dough...
+Adding sauce
+Adding toppings [&amp;quot;Grated Reggiano Cheese&amp;quot;]
+Bake for 25 minutes at 350
+Cutting the pizza into diagonal slices
+Place pizza in the official PizzaStore box
+*/
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Посетим пиццерию в Чикаго и аналогично закажем сырную пиццу&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;let chikagoStore = ChikagoPizzaStore()
+let ChikagoPizza = chikagoStore.orderPizza(&amp;quot;cheese&amp;quot;)
+print(ChikagoPizza.name)
+/*
+Preparing Chikago style Deep Dish Cheese Pizza
+Tossing dough...
+Adding sauce
+Adding toppings [&amp;quot;Shredded Mozarella Cheese&amp;quot;]
+Bake for 25 minutes at 350
+Cutting pizza into square slices
+Place pizza in the official PizzaStore box
+Ny style Sauce and Cheese Pizza
+Chikago style Deep Dish Cheese Pizza
+*/
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;реализация-паттерна-strategy:a101eda76dab66e01165dbf941fe4575&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Decorator.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ochococo/Design-Patterns-In-Swift#-abstract-factory&#34;&gt;Swift design patterns&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Swift Design Patterns: Decorator</title>
@@ -190,7 +462,7 @@ myDarkRoast = Whip(beverage: myDarkRoast)
       <guid>http://rag0n.github.io/2015/12/04/swift-design-patterns-observer/</guid>
       <description>
 
-&lt;h3 id=&#34;зачем-нужен&#34;&gt;Зачем нужен?&lt;/h3&gt;
+&lt;h3 id=&#34;зачем-нужен:a5161de039683433187a481416fc263d&#34;&gt;Зачем нужен?&lt;/h3&gt;
 
 &lt;p&gt;Паттерн Observer часто применяется для определения бизнес-логики(data model) в субъекте и делегирования view функций различным несвязанным наблюдателям. Т.е применяется во &amp;laquo;View&amp;raquo; части паттерна MVC.&lt;/p&gt;
 
@@ -203,14 +475,14 @@ myDarkRoast = Whip(beverage: myDarkRoast)
 
 &lt;p&gt;Соответствует Dependency Inversion принципу SOLID: субьект зависит не от наблюдателей, а от интерфейса Observer. Т.о наблюдателями могут быть любые объекты, реализующие данный интерфейс. В результате получаем слабую связанность(low coupling) между объектами.&lt;/p&gt;
 
-&lt;h3 id=&#34;определение&#34;&gt;Определение&lt;/h3&gt;
+&lt;h3 id=&#34;определение:a5161de039683433187a481416fc263d&#34;&gt;Определение&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;определяет отношение один-ко-многим таким образом, что при изменении состояния одного объекта происходит оповещение и обновление всех остальных зависимых объектов&lt;/li&gt;
 &lt;li&gt;инкапсулирует основные(независимые) компоненты в абстракции Subject и изменяющиеся(опциональные) компоненты в Observers.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;реализация&#34;&gt;Реализация&lt;/h3&gt;
+&lt;h3 id=&#34;реализация:a5161de039683433187a481416fc263d&#34;&gt;Реализация&lt;/h3&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Разграничьте независимую(базовую, core) функциональность и зависимую(или опциональную) функциональность&lt;/li&gt;
@@ -222,7 +494,7 @@ myDarkRoast = Whip(beverage: myDarkRoast)
 &lt;li&gt;Субьект может выполнить активную доставку или наблюдатели могут сами получать необходимую информацию&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;пример&#34;&gt;Пример&lt;/h3&gt;
+&lt;h3 id=&#34;пример:a5161de039683433187a481416fc263d&#34;&gt;Пример&lt;/h3&gt;
 
 &lt;p&gt;В качестве примера: допустим у нас есть метеостанция, которая вызывает метод measurementsChanged у класса WeatherData при изменении температуры/влажности/давления.&lt;/p&gt;
 
@@ -304,7 +576,7 @@ myDarkRoast = Whip(beverage: myDarkRoast)
 
 &lt;p&gt;В данной реализации мы используем протокол DisplayElement, т.к предполагаем что у нас имеется несколько классов которые по разному представляют данные.&lt;/p&gt;
 
-&lt;h4 id=&#34;реализация-паттерна-strategy&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
+&lt;h4 id=&#34;реализация-паттерна-strategy:a5161de039683433187a481416fc263d&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Observer.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;

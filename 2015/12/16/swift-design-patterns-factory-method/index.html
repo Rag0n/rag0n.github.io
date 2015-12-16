@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Swift Design Patterns: Factory Method  &middot; Developer&#39;s adventures</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="Описание и реализация паттерна проектирования Factory Method на языке Swift 2." />
+
+<meta name="keywords" content="swift design patterns, swift паттерны проектирования, паттерны проектирования, ">
+
+
+<meta property="og:title" content="Swift Design Patterns: Factory Method  &middot; Developer&#39;s adventures ">
+<meta property="og:site_name" content="Developer&#39;s adventures"/>
+<meta property="og:url" content="http://rag0n.github.io/2015/12/16/swift-design-patterns-factory-method/" />
+<meta property="og:locale" content="ru">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Описание и реализация паттерна проектирования Factory Method на языке Swift 2."/>
+<meta property="og:article:published_time" content="2015-12-16T17:15:56&#43;03:00" />
+<meta property="og:article:modified_time" content="2015-12-16T17:15:56&#43;03:00" />
+
+  
+    
+<meta property="og:article:tag" content="swift design patterns">
+    
+<meta property="og:article:tag" content="swift паттерны проектирования">
+    
+<meta property="og:article:tag" content="паттерны проектирования">
+    
+  
+
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Swift Design Patterns: Factory Method",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2015-12-16",
+    "description": "Описание и реализация паттерна проектирования Factory Method на языке Swift 2.",
+    "wordCount":  847 
+  }
+</script>
+
+
+
+<link rel="canonical" href="http://rag0n.github.io/2015/12/16/swift-design-patterns-factory-method/" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://rag0n.github.io/touch-icon-144-precomposed.png">
+<link href="http://rag0n.github.io/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.15" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link href='https://fonts.googleapis.com/css?family=Merriweather:300%7CRaleway%7COpen+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="http://rag0n.github.io/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://rag0n.github.io/css/style.css">
+<link rel="stylesheet" href="http://rag0n.github.io/css/highlight/solarized_dark.css">
+
+  
+</head>
+<body>
+  <main id="main-wrapper" class="container main_wrapper has-sidebar right">
+    <header id="main-header" class="container main_header">
+  <div class="container brand">
+  <div class="container title h1-like">
+  <a class="baselink" href="http://rag0n.github.io/">
+  Alexander Guschin
+
+</a>
+
+</div>
+
+  
+<div class="container topline">
+  
+  Notes about my dev adventures
+
+
+</div>
+
+
+</div>
+
+  <nav class="container nav primary no-print">
+  
+
+<a class="homelink" href="http://rag0n.github.io/">Blog</a>
+
+
+  
+<a href="http://rag0n.github.io/about" title="About me">About</a>
+
+<a href="http://rag0n.github.io/tags" title="Show list of tags">Tags</a>
+
+
+</nav>
+
+<div class="container nav secondary no-print">
+  
+<a id="contact-link-email" class="contact_link" href="mailto:alexander.ragon@gmail.com">
+  <span class="fa fa-envelope-square"></span><span>email</span></a>
+
+
+
+<a id="contact-link-github" class="contact_link" href="https://github.com/Rag0n">
+  <span class="fa fa-github-square"></span><span>github</span></a>
+
+
+
+<a id="contact-link-bitbucket" class="contact_link" href="https://bitbucket.org/Rag0n">
+  <span class="fa fa-bitbucket-square"></span><span>bitbucket</span></a>
+
+
+
+
+
+
+
+
+
+
+
+<a id="contact-link-youtube" class="contact_link" href="https://www.youtube.com/channel/UC3lJRhdqaLohrPwVJdNCPbQ">
+  <span class="fa fa-youtube-square"></span><span>youtube</span></a>
+
+
+
+
+
+</div>
+
+
+  
+
+</header>
+
+
+<article id="main-content" class="container main_content single">
+  <header class="container hat">
+  <h1>Swift Design Patterns: Factory Method
+</h1>
+
+  <div class="metas">
+<time datetime="2015-12-16">16 Dec, 2015</time>
+
+
+  
+    &middot; by rag0n
+  
+  &middot; Read in about 4 min
+  &middot; (847 Words)
+  <br>
+  
+<a class="label" href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B">паттерны</a>
+
+<a class="label" href="http://rag0n.github.io/tags/swift">swift</a>
+
+
+
+</div>
+
+</header>
+
+  <div class="container content">
+  
+
+<h3 id="зачем-нужен:a101eda76dab66e01165dbf941fe4575">Зачем нужен?</h3>
+
+<p>Паттерн Factory method применяется когда создатель(фреймворк) должен стандартизировать архитектурную модель для клиентов и одновременно позволить клиентам определять свои объекты предметной области(domain objets).</p>
+
+<p>Обеспечивает соблюдение принципа инверсии зависимостей. Уменьшает связанность классов.</p>
+
+<h3 id="определение:a101eda76dab66e01165dbf941fe4575">Определение</h3>
+
+<ul>
+<li>определяет интерфейс создания объекта, но позволяет субклассам выбрать класс создаваемого экземпляра. Таким образом, Фабричный метод делегирует операцию создания экземпляра субклассам.</li>
+</ul>
+
+<h3 id="реализация:a101eda76dab66e01165dbf941fe4575">Реализация</h3>
+
+<p>Суперкласс определяет стандартное поведение и делегирует детали создания субклассам, определенным пользователем. Для создания объектов используется наследование.</p>
+
+<p>Существует несколько реализаций:
+статичный метод(вместо метода инициализации) или
+абстрактный метод(реализация определяется подклассами)</p>
+
+<ol>
+<li>Спроектируйте аргументы фабричного метода(по каким харектиристикам фабричный метод будет выбирать конкретный продукт)</li>
+<li>Объявите констуктуры приватными или защищенными</li>
+<li>Рассмотрите возможность создания внутреннего &laquo;object pool&raquo;, который позволит возвращать один и тот же экземпляр, вместо создания нового каждый раз</li>
+</ol>
+
+<h3 id="пример:a101eda76dab66e01165dbf941fe4575">Пример</h3>
+
+<p>Фабричный метод похож на абстрактную фабрику, но в нем отсутствует акцент на семействах.</p>
+
+<p>Допустим у нас есть сеть пиццерий по всей стране. В Нью-Йорке жители любят тонкий слой теста, немного специй. В Чикаго - толстый слой теста, много сыра.</p>
+
+<p>Мы хотим, чтобы процесс приготовления был стандартизирован и одинаков во всех пиццерий, но при этом учитывались особенности местных жителей.</p>
+
+<p>Для этого объявим общий интерфейс для пиццерий, при этом делегируем реализацию фабричного метода субклассам:</p>
+
+<pre><code class="language-objectivec">// абстрактный класс создатель
+protocol PizzaStore {
+    func orderPizza(type: String) -&gt; Pizza
+    // фабричный метод
+    func createPizza(type: String) -&gt; Pizza
+}
+
+extension PizzaStore {
+    func orderPizza(type: String) -&gt; Pizza {
+        // для создание пиццы используем фабричный метод
+        let pizza = createPizza(type)
+        
+        pizza.prepare()
+        pizza.bake()
+        pizza.cut()
+        pizza.box()
+        
+        return pizza
+    }
+}
+</code></pre>
+
+<p>Объявим конкретные пиццерии, учитывающие местные обычаи - для этого реализуем фабричный метод</p>
+
+<pre><code class="language-objectivec">// конкретный класс-создатель
+class NYPizzaStore: PizzaStore {
+    
+    func createPizza(type: String) -&gt; Pizza {
+        switch type {
+            case &quot;cheese&quot;:
+                return NYStyleCheesePizza()
+            case &quot;veggie&quot;:
+                return NYStyleVeggiePizza()
+            case &quot;clam&quot;:
+                return NYStyleClamPizza()
+            case &quot;pepperoni&quot;:
+                return NYStylePepperoniPizza()
+        default:
+            return NYStyleCheesePizza()
+        }
+    }
+}
+
+
+// конкретный класс-создатель
+class ChikagoPizzaStore: PizzaStore {
+    
+    func createPizza(type: String) -&gt; Pizza {
+        switch type {
+        case &quot;cheese&quot;:
+            return ChikagoStyleCheesePizza()
+        case &quot;veggie&quot;:
+            return ChikagoStyleVeggiePizza()
+        case &quot;clam&quot;:
+            return ChikagoStyleClamPizza()
+        case &quot;pepperoni&quot;:
+            return ChikagoStylePepperoniPizza()
+        default:
+            return ChikagoStyleCheesePizza()
+        }
+    }
+}
+</code></pre>
+
+<p>Объявим абстрактный продукт и стандартизируем процесс приготовления</p>
+
+<pre><code class="language-objectivec">// абстрактный продукт
+protocol Pizza {
+    var name: String { get }
+    var dough: String { get }
+    var sauce: String { get }
+    var toppings: [String] { get }
+    
+    func prepare()
+    
+    func bake()
+    
+    func cut()
+    
+    func box()
+}
+
+// добавляем реализацию по умолчанию
+extension Pizza {
+    
+    func prepare() {
+        print(&quot;Preparing \(name)&quot;)
+        print(&quot;Tossing dough...&quot;)
+        print(&quot;Adding sauce&quot;)
+        print(&quot;Adding toppings \(toppings)&quot;)
+    }
+    
+    func bake() {
+        print(&quot;Bake for 25 minutes at 350&quot;)
+    }
+    
+    func cut() {
+        print(&quot;Cutting the pizza into diagonal slices&quot;)
+    }
+    
+    func box() {
+        print(&quot;Place pizza in the official PizzaStore box&quot;)
+    }
+}
+</code></pre>
+
+<p>Создадим конкретные продукты</p>
+
+<pre><code class="language-objectivec">// конкретные продукты
+class NYStyleCheesePizza: Pizza {
+    let name = &quot;Ny style Sauce and Cheese Pizza&quot;
+    let dough = &quot;Thin Crust Dough&quot;
+    let sauce = &quot;Marinara Sauce&quot;
+    let toppings = [&quot;Grated Reggiano Cheese&quot;]
+}
+
+class NYStyleVeggiePizza: Pizza {
+    let name = &quot;Ny style Sauce and Veggie Pizza&quot;
+    let dough = &quot;Thin Crust Dough&quot;
+    let sauce = &quot;Marinara Sauce&quot;
+    let toppings = [&quot;Veggie&quot;]
+}
+
+class NYStyleClamPizza: Pizza {
+    let name = &quot;Ny style Sauce and Clam Pizza&quot;
+    let dough = &quot;Thin Crust Dough&quot;
+    let sauce = &quot;Marinara Sauce&quot;
+    let toppings = [&quot;Clam&quot;]
+}
+
+class NYStylePepperoniPizza: Pizza {
+    let name = &quot;Ny style Sauce and Pepperoni Pizza&quot;
+    let dough = &quot;Thin Crust Dough&quot;
+    let sauce = &quot;Marinara Sauce&quot;
+    let toppings = [&quot;Pepperoni&quot;]
+}
+
+class ChikagoStyleCheesePizza: Pizza {
+    let name = &quot;Chikago style Deep Dish Cheese Pizza&quot;
+    let dough = &quot;Extra Thick Crust Dough&quot;
+    let sauce = &quot;Plum Tomato Sauce&quot;
+    let toppings = [&quot;Shredded Mozarella Cheese&quot;]
+    
+    func cut() {
+        print(&quot;Cutting pizza into square slices&quot;)
+    }
+}
+
+class ChikagoStyleVeggiePizza: Pizza {
+    let name = &quot;Chikago style Deep Dish Veggie Pizza&quot;
+    let dough = &quot;Extra Thick Crust Dough&quot;
+    let sauce = &quot;Plum Tomato Sauce&quot;
+    let toppings = [&quot;Veggie&quot;]
+    
+    func cut() {
+        print(&quot;Cutting pizza into square slices&quot;)
+    }
+}
+
+class ChikagoStyleClamPizza: Pizza {
+    let name = &quot;Chikago style Deep Dish Clam Pizza&quot;
+    let dough = &quot;Extra Thick Crust Dough&quot;
+    let sauce = &quot;Plum Tomato Sauce&quot;
+    let toppings = [&quot;Clam&quot;]
+    
+    func cut() {
+        print(&quot;Cutting pizza into square slices&quot;)
+    }
+}
+
+class ChikagoStylePepperoniPizza: Pizza {
+    let name = &quot;Chikago style Deep Dish Pepperoni Pizza&quot;
+    let dough = &quot;Extra Thick Crust Dough&quot;
+    let sauce = &quot;Plum Tomato Sauce&quot;
+    let toppings = [&quot;Pepperoni&quot;]
+    
+    func cut() {
+        print(&quot;Cutting pizza into square slices&quot;)
+    }
+}
+}
+</code></pre>
+
+<p>Посетим пиццерию в Нью-Йорке и закажем сырную пиццу</p>
+
+<pre><code class="language-objectivec">let nyStore = NYPizzaStore()
+let NYPizza = nyStore.orderPizza(&quot;cheese&quot;)
+print(NYPizza.name)
+/*
+Preparing Ny style Sauce and Cheese Pizza
+Tossing dough...
+Adding sauce
+Adding toppings [&quot;Grated Reggiano Cheese&quot;]
+Bake for 25 minutes at 350
+Cutting the pizza into diagonal slices
+Place pizza in the official PizzaStore box
+*/
+}
+</code></pre>
+
+<p>Посетим пиццерию в Чикаго и аналогично закажем сырную пиццу</p>
+
+<pre><code class="language-objectivec">let chikagoStore = ChikagoPizzaStore()
+let ChikagoPizza = chikagoStore.orderPizza(&quot;cheese&quot;)
+print(ChikagoPizza.name)
+/*
+Preparing Chikago style Deep Dish Cheese Pizza
+Tossing dough...
+Adding sauce
+Adding toppings [&quot;Shredded Mozarella Cheese&quot;]
+Bake for 25 minutes at 350
+Cutting pizza into square slices
+Place pizza in the official PizzaStore box
+Ny style Sauce and Cheese Pizza
+Chikago style Deep Dish Cheese Pizza
+*/
+}
+</code></pre>
+
+<h4 id="реализация-паттерна-strategy:a101eda76dab66e01165dbf941fe4575">Реализация паттерна Strategy:</h4>
+
+<ul>
+<li><a href="https://github.com/Rag0n/hfdp/blob/master/Decorator.playground/Contents.swift">Мой playground с полной реализацией</a></li>
+<li><a href="https://github.com/ochococo/Design-Patterns-In-Swift#-abstract-factory">Swift design patterns</a></li>
+</ul>
+
+</div>
+
+
+  <footer class="container">
+  <div class="container navigation no-print">
+  <h2>Navigation</h2>
+  
+  
+
+    
+    <a class="prev" href="http://rag0n.github.io/2015/12/15/swift-design-patterns-decorator/" title="Swift Design Patterns: Decorator">
+      Previous
+    </a>
+    
+
+    
+
+  
+
+
+</div>
+
+  <div class="container comments">
+  <h2>Comments</h2>
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//rag0n.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+</footer>
+
+</article>
+      <footer id="main-footer" class="container main_footer">
+  
+
+  <div class="container nav foot no-print">
+  
+
+  <a class="toplink" href="#">back to top</a>
+
+</div>
+
+  <div class="container credits">
+  
+<div class="container footline">
+  
+  <i class='fa fa-code'></i> Keep calm and carry on coding
+
+
+</div>
+
+
+  
+<div class="container copyright">
+  
+  &copy; 2015 Rag0n
+
+
+</div>
+
+
+</div>
+
+</footer>
+
+    </main>
+    
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//rag0n.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script src="http://rag0n.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-71035774-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+    
+  </body>
+</html>
+

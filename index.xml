@@ -9,8 +9,280 @@
     <managingEditor>alexander.ragon@gmail.com (Alexander Guschin)</managingEditor>
     <webMaster>alexander.ragon@gmail.com (Alexander Guschin)</webMaster>
     <copyright>(c) 2015 Rag0n</copyright>
-    <lastBuildDate>Tue, 15 Dec 2015 12:31:52 +0300</lastBuildDate>
+    <lastBuildDate>Wed, 16 Dec 2015 17:15:56 +0300</lastBuildDate>
     <atom:link href="http://rag0n.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Swift Design Patterns: Factory Method</title>
+      <link>http://rag0n.github.io/2015/12/16/swift-design-patterns-factory-method/</link>
+      <pubDate>Wed, 16 Dec 2015 17:15:56 +0300</pubDate>
+      <author>alexander.ragon@gmail.com (Alexander Guschin)</author>
+      <guid>http://rag0n.github.io/2015/12/16/swift-design-patterns-factory-method/</guid>
+      <description>
+
+&lt;h3 id=&#34;зачем-нужен:a101eda76dab66e01165dbf941fe4575&#34;&gt;Зачем нужен?&lt;/h3&gt;
+
+&lt;p&gt;Паттерн Factory method применяется когда создатель(фреймворк) должен стандартизировать архитектурную модель для клиентов и одновременно позволить клиентам определять свои объекты предметной области(domain objets).&lt;/p&gt;
+
+&lt;p&gt;Обеспечивает соблюдение принципа инверсии зависимостей. Уменьшает связанность классов.&lt;/p&gt;
+
+&lt;h3 id=&#34;определение:a101eda76dab66e01165dbf941fe4575&#34;&gt;Определение&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;определяет интерфейс создания объекта, но позволяет субклассам выбрать класс создаваемого экземпляра. Таким образом, Фабричный метод делегирует операцию создания экземпляра субклассам.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;реализация:a101eda76dab66e01165dbf941fe4575&#34;&gt;Реализация&lt;/h3&gt;
+
+&lt;p&gt;Суперкласс определяет стандартное поведение и делегирует детали создания субклассам, определенным пользователем. Для создания объектов используется наследование.&lt;/p&gt;
+
+&lt;p&gt;Существует несколько реализаций:
+статичный метод(вместо метода инициализации) или
+абстрактный метод(реализация определяется подклассами)&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Спроектируйте аргументы фабричного метода(по каким харектиристикам фабричный метод будет выбирать конкретный продукт)&lt;/li&gt;
+&lt;li&gt;Объявите констуктуры приватными или защищенными&lt;/li&gt;
+&lt;li&gt;Рассмотрите возможность создания внутреннего &amp;laquo;object pool&amp;raquo;, который позволит возвращать один и тот же экземпляр, вместо создания нового каждый раз&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;пример:a101eda76dab66e01165dbf941fe4575&#34;&gt;Пример&lt;/h3&gt;
+
+&lt;p&gt;Фабричный метод похож на абстрактную фабрику, но в нем отсутствует акцент на семействах.&lt;/p&gt;
+
+&lt;p&gt;Допустим у нас есть сеть пиццерий по всей стране. В Нью-Йорке жители любят тонкий слой теста, немного специй. В Чикаго - толстый слой теста, много сыра.&lt;/p&gt;
+
+&lt;p&gt;Мы хотим, чтобы процесс приготовления был стандартизирован и одинаков во всех пиццерий, но при этом учитывались особенности местных жителей.&lt;/p&gt;
+
+&lt;p&gt;Для этого объявим общий интерфейс для пиццерий, при этом делегируем реализацию фабричного метода субклассам:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// абстрактный класс создатель
+protocol PizzaStore {
+    func orderPizza(type: String) -&amp;gt; Pizza
+    // фабричный метод
+    func createPizza(type: String) -&amp;gt; Pizza
+}
+
+extension PizzaStore {
+    func orderPizza(type: String) -&amp;gt; Pizza {
+        // для создание пиццы используем фабричный метод
+        let pizza = createPizza(type)
+        
+        pizza.prepare()
+        pizza.bake()
+        pizza.cut()
+        pizza.box()
+        
+        return pizza
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Объявим конкретные пиццерии, учитывающие местные обычаи - для этого реализуем фабричный метод&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// конкретный класс-создатель
+class NYPizzaStore: PizzaStore {
+    
+    func createPizza(type: String) -&amp;gt; Pizza {
+        switch type {
+            case &amp;quot;cheese&amp;quot;:
+                return NYStyleCheesePizza()
+            case &amp;quot;veggie&amp;quot;:
+                return NYStyleVeggiePizza()
+            case &amp;quot;clam&amp;quot;:
+                return NYStyleClamPizza()
+            case &amp;quot;pepperoni&amp;quot;:
+                return NYStylePepperoniPizza()
+        default:
+            return NYStyleCheesePizza()
+        }
+    }
+}
+
+
+// конкретный класс-создатель
+class ChikagoPizzaStore: PizzaStore {
+    
+    func createPizza(type: String) -&amp;gt; Pizza {
+        switch type {
+        case &amp;quot;cheese&amp;quot;:
+            return ChikagoStyleCheesePizza()
+        case &amp;quot;veggie&amp;quot;:
+            return ChikagoStyleVeggiePizza()
+        case &amp;quot;clam&amp;quot;:
+            return ChikagoStyleClamPizza()
+        case &amp;quot;pepperoni&amp;quot;:
+            return ChikagoStylePepperoniPizza()
+        default:
+            return ChikagoStyleCheesePizza()
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Объявим абстрактный продукт и стандартизируем процесс приготовления&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// абстрактный продукт
+protocol Pizza {
+    var name: String { get }
+    var dough: String { get }
+    var sauce: String { get }
+    var toppings: [String] { get }
+    
+    func prepare()
+    
+    func bake()
+    
+    func cut()
+    
+    func box()
+}
+
+// добавляем реализацию по умолчанию
+extension Pizza {
+    
+    func prepare() {
+        print(&amp;quot;Preparing \(name)&amp;quot;)
+        print(&amp;quot;Tossing dough...&amp;quot;)
+        print(&amp;quot;Adding sauce&amp;quot;)
+        print(&amp;quot;Adding toppings \(toppings)&amp;quot;)
+    }
+    
+    func bake() {
+        print(&amp;quot;Bake for 25 minutes at 350&amp;quot;)
+    }
+    
+    func cut() {
+        print(&amp;quot;Cutting the pizza into diagonal slices&amp;quot;)
+    }
+    
+    func box() {
+        print(&amp;quot;Place pizza in the official PizzaStore box&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Создадим конкретные продукты&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// конкретные продукты
+class NYStyleCheesePizza: Pizza {
+    let name = &amp;quot;Ny style Sauce and Cheese Pizza&amp;quot;
+    let dough = &amp;quot;Thin Crust Dough&amp;quot;
+    let sauce = &amp;quot;Marinara Sauce&amp;quot;
+    let toppings = [&amp;quot;Grated Reggiano Cheese&amp;quot;]
+}
+
+class NYStyleVeggiePizza: Pizza {
+    let name = &amp;quot;Ny style Sauce and Veggie Pizza&amp;quot;
+    let dough = &amp;quot;Thin Crust Dough&amp;quot;
+    let sauce = &amp;quot;Marinara Sauce&amp;quot;
+    let toppings = [&amp;quot;Veggie&amp;quot;]
+}
+
+class NYStyleClamPizza: Pizza {
+    let name = &amp;quot;Ny style Sauce and Clam Pizza&amp;quot;
+    let dough = &amp;quot;Thin Crust Dough&amp;quot;
+    let sauce = &amp;quot;Marinara Sauce&amp;quot;
+    let toppings = [&amp;quot;Clam&amp;quot;]
+}
+
+class NYStylePepperoniPizza: Pizza {
+    let name = &amp;quot;Ny style Sauce and Pepperoni Pizza&amp;quot;
+    let dough = &amp;quot;Thin Crust Dough&amp;quot;
+    let sauce = &amp;quot;Marinara Sauce&amp;quot;
+    let toppings = [&amp;quot;Pepperoni&amp;quot;]
+}
+
+class ChikagoStyleCheesePizza: Pizza {
+    let name = &amp;quot;Chikago style Deep Dish Cheese Pizza&amp;quot;
+    let dough = &amp;quot;Extra Thick Crust Dough&amp;quot;
+    let sauce = &amp;quot;Plum Tomato Sauce&amp;quot;
+    let toppings = [&amp;quot;Shredded Mozarella Cheese&amp;quot;]
+    
+    func cut() {
+        print(&amp;quot;Cutting pizza into square slices&amp;quot;)
+    }
+}
+
+class ChikagoStyleVeggiePizza: Pizza {
+    let name = &amp;quot;Chikago style Deep Dish Veggie Pizza&amp;quot;
+    let dough = &amp;quot;Extra Thick Crust Dough&amp;quot;
+    let sauce = &amp;quot;Plum Tomato Sauce&amp;quot;
+    let toppings = [&amp;quot;Veggie&amp;quot;]
+    
+    func cut() {
+        print(&amp;quot;Cutting pizza into square slices&amp;quot;)
+    }
+}
+
+class ChikagoStyleClamPizza: Pizza {
+    let name = &amp;quot;Chikago style Deep Dish Clam Pizza&amp;quot;
+    let dough = &amp;quot;Extra Thick Crust Dough&amp;quot;
+    let sauce = &amp;quot;Plum Tomato Sauce&amp;quot;
+    let toppings = [&amp;quot;Clam&amp;quot;]
+    
+    func cut() {
+        print(&amp;quot;Cutting pizza into square slices&amp;quot;)
+    }
+}
+
+class ChikagoStylePepperoniPizza: Pizza {
+    let name = &amp;quot;Chikago style Deep Dish Pepperoni Pizza&amp;quot;
+    let dough = &amp;quot;Extra Thick Crust Dough&amp;quot;
+    let sauce = &amp;quot;Plum Tomato Sauce&amp;quot;
+    let toppings = [&amp;quot;Pepperoni&amp;quot;]
+    
+    func cut() {
+        print(&amp;quot;Cutting pizza into square slices&amp;quot;)
+    }
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Посетим пиццерию в Нью-Йорке и закажем сырную пиццу&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;let nyStore = NYPizzaStore()
+let NYPizza = nyStore.orderPizza(&amp;quot;cheese&amp;quot;)
+print(NYPizza.name)
+/*
+Preparing Ny style Sauce and Cheese Pizza
+Tossing dough...
+Adding sauce
+Adding toppings [&amp;quot;Grated Reggiano Cheese&amp;quot;]
+Bake for 25 minutes at 350
+Cutting the pizza into diagonal slices
+Place pizza in the official PizzaStore box
+*/
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Посетим пиццерию в Чикаго и аналогично закажем сырную пиццу&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;let chikagoStore = ChikagoPizzaStore()
+let ChikagoPizza = chikagoStore.orderPizza(&amp;quot;cheese&amp;quot;)
+print(ChikagoPizza.name)
+/*
+Preparing Chikago style Deep Dish Cheese Pizza
+Tossing dough...
+Adding sauce
+Adding toppings [&amp;quot;Shredded Mozarella Cheese&amp;quot;]
+Bake for 25 minutes at 350
+Cutting pizza into square slices
+Place pizza in the official PizzaStore box
+Ny style Sauce and Cheese Pizza
+Chikago style Deep Dish Cheese Pizza
+*/
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;реализация-паттерна-strategy:a101eda76dab66e01165dbf941fe4575&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Decorator.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ochococo/Design-Patterns-In-Swift#-abstract-factory&#34;&gt;Swift design patterns&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Swift Design Patterns: Decorator</title>
@@ -190,7 +462,7 @@ myDarkRoast = Whip(beverage: myDarkRoast)
       <guid>http://rag0n.github.io/2015/12/04/swift-design-patterns-observer/</guid>
       <description>
 
-&lt;h3 id=&#34;зачем-нужен&#34;&gt;Зачем нужен?&lt;/h3&gt;
+&lt;h3 id=&#34;зачем-нужен:a5161de039683433187a481416fc263d&#34;&gt;Зачем нужен?&lt;/h3&gt;
 
 &lt;p&gt;Паттерн Observer часто применяется для определения бизнес-логики(data model) в субъекте и делегирования view функций различным несвязанным наблюдателям. Т.е применяется во &amp;laquo;View&amp;raquo; части паттерна MVC.&lt;/p&gt;
 
@@ -203,14 +475,14 @@ myDarkRoast = Whip(beverage: myDarkRoast)
 
 &lt;p&gt;Соответствует Dependency Inversion принципу SOLID: субьект зависит не от наблюдателей, а от интерфейса Observer. Т.о наблюдателями могут быть любые объекты, реализующие данный интерфейс. В результате получаем слабую связанность(low coupling) между объектами.&lt;/p&gt;
 
-&lt;h3 id=&#34;определение&#34;&gt;Определение&lt;/h3&gt;
+&lt;h3 id=&#34;определение:a5161de039683433187a481416fc263d&#34;&gt;Определение&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;определяет отношение один-ко-многим таким образом, что при изменении состояния одного объекта происходит оповещение и обновление всех остальных зависимых объектов&lt;/li&gt;
 &lt;li&gt;инкапсулирует основные(независимые) компоненты в абстракции Subject и изменяющиеся(опциональные) компоненты в Observers.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;реализация&#34;&gt;Реализация&lt;/h3&gt;
+&lt;h3 id=&#34;реализация:a5161de039683433187a481416fc263d&#34;&gt;Реализация&lt;/h3&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Разграничьте независимую(базовую, core) функциональность и зависимую(или опциональную) функциональность&lt;/li&gt;
@@ -222,7 +494,7 @@ myDarkRoast = Whip(beverage: myDarkRoast)
 &lt;li&gt;Субьект может выполнить активную доставку или наблюдатели могут сами получать необходимую информацию&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;пример&#34;&gt;Пример&lt;/h3&gt;
+&lt;h3 id=&#34;пример:a5161de039683433187a481416fc263d&#34;&gt;Пример&lt;/h3&gt;
 
 &lt;p&gt;В качестве примера: допустим у нас есть метеостанция, которая вызывает метод measurementsChanged у класса WeatherData при изменении температуры/влажности/давления.&lt;/p&gt;
 
@@ -304,7 +576,7 @@ myDarkRoast = Whip(beverage: myDarkRoast)
 
 &lt;p&gt;В данной реализации мы используем протокол DisplayElement, т.к предполагаем что у нас имеется несколько классов которые по разному представляют данные.&lt;/p&gt;
 
-&lt;h4 id=&#34;реализация-паттерна-strategy&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
+&lt;h4 id=&#34;реализация-паттерна-strategy:a5161de039683433187a481416fc263d&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Observer.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
@@ -442,17 +714,17 @@ class Squeak: QuackBehavior {
 
 &lt;hr /&gt;
 
-&lt;h2 id=&#34;предпочитайте-let-вместо-var&#34;&gt;Предпочитайте &lt;code&gt;let&lt;/code&gt; вместо &lt;code&gt;var&lt;/code&gt;&lt;/h2&gt;
+&lt;h2 id=&#34;предпочитайте-let-вместо-var:60e2ba6dfcacc9c41dad457311fc4e49&#34;&gt;Предпочитайте &lt;code&gt;let&lt;/code&gt; вместо &lt;code&gt;var&lt;/code&gt;&lt;/h2&gt;
 
 &lt;p&gt;Тренируйте свой мозг и рефлексы по умолчанию использовать let. Вы можете объявить переменную как var наперед, но я рекомендую использовать var только если вам обязательно надо изменить значение переменной. Это самый очевидный пункт из моих лучших практик, но это очень важно и стоит упоминания.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;&lt;em&gt;Примечание от переводчика:&lt;/em&gt;&lt;/strong&gt; в xCode 7 компилятор автоматически анализирует, меняете ли вы значение у переменной, объявленной как &lt;code&gt;var&lt;/code&gt; и предлагает изменить ее на &lt;code&gt;let&lt;/code&gt; в противном случае.&lt;/p&gt;
 
-&lt;h2 id=&#34;предпочитайте-приватный-private-контроль-доступа&#34;&gt;Предпочитайте приватный(&lt;code&gt;private&lt;/code&gt;) контроль доступа&lt;/h2&gt;
+&lt;h2 id=&#34;предпочитайте-приватный-private-контроль-доступа:60e2ba6dfcacc9c41dad457311fc4e49&#34;&gt;Предпочитайте приватный(&lt;code&gt;private&lt;/code&gt;) контроль доступа&lt;/h2&gt;
 
 &lt;p&gt;Опять очевидный пункт, но он также стоит упоминания. Всегда лучше скрывать как можно больше реализации(что означает доступ только из того же исходного файла).&lt;/p&gt;
 
-&lt;h2 id=&#34;предпочитайте-не-опциональные-типы&#34;&gt;Предпочитайте не опциональные типы&lt;/h2&gt;
+&lt;h2 id=&#34;предпочитайте-не-опциональные-типы:60e2ba6dfcacc9c41dad457311fc4e49&#34;&gt;Предпочитайте не опциональные типы&lt;/h2&gt;
 
 &lt;p&gt;Опциональные типы потрясающие. Этот концепт существует и в других языках(Scala, Haskell, и др).&lt;/p&gt;
 
@@ -460,17 +732,17 @@ class Squeak: QuackBehavior {
 
 &lt;p&gt;Например, я предпочитаю вызывать исключения в случаях, когда  функция не может вернуть действительное(не nil) значение. Посмотрите на &lt;code&gt;NSJSONSerialization.JSONObjectWithData&lt;/code&gt;. Эта функция гарантирует, что она возвращает значение, иначе она вызывает исключение.&lt;/p&gt;
 
-&lt;h2 id=&#34;предпочитайте-guard-let-вместо-if-let&#34;&gt;Предпочитайте &lt;code&gt;guard let&lt;/code&gt; вместо &lt;code&gt;if let&lt;/code&gt;&lt;/h2&gt;
+&lt;h2 id=&#34;предпочитайте-guard-let-вместо-if-let:60e2ba6dfcacc9c41dad457311fc4e49&#34;&gt;Предпочитайте &lt;code&gt;guard let&lt;/code&gt; вместо &lt;code&gt;if let&lt;/code&gt;&lt;/h2&gt;
 
 &lt;p&gt;Что вы можете сделать в &lt;code&gt;if let&lt;/code&gt; блоке? Я почти всегда использую &lt;code&gt;guard let&lt;/code&gt; и ранний возврат из функции, если что-то идет не так. Ранний возврат способствует более легкому чтению кода, т.к вы можете гарантировать корректное состояние переменных. Если вы не можете вычислить обязательное значение, используйте ранний возврат(return).&lt;/p&gt;
 
-&lt;h2 id=&#34;не-бойтесь-вызывать-исключения&#34;&gt;Не бойтесь вызывать исключения&lt;/h2&gt;
+&lt;h2 id=&#34;не-бойтесь-вызывать-исключения:60e2ba6dfcacc9c41dad457311fc4e49&#34;&gt;Не бойтесь вызывать исключения&lt;/h2&gt;
 
 &lt;p&gt;Вместо раннего возврата, вы можете вызвать исключение, как альтернативную точку выхода из функции. Обработка исключений в Objective-C (&lt;code&gt;@try @catch&lt;/code&gt;) всегда была доступна, хотя использовать эту возможность было не принято. В Swift обработка исключений является фундаментальной идеей и вы должны использовать это.&lt;/p&gt;
 
 &lt;p&gt;Например, у меня была функция парсинга, которая возвращала опциональный тип, если данные не могли быть синтаксически разобраны. Это означает, что вызывающая программа должна была проверять возвращаемое значение на &lt;code&gt;nil&lt;/code&gt;. Я отрефакторил эту функцию так, чтобы она всегда возвращала действительное значение и вызывала исключение в противном случае.&lt;/p&gt;
 
-&lt;h2 id=&#34;не-используйте-guard-для-многочисленных-проверок&#34;&gt;Не используйте &lt;code&gt;guard&lt;/code&gt; для многочисленных проверок&lt;/h2&gt;
+&lt;h2 id=&#34;не-используйте-guard-для-многочисленных-проверок:60e2ba6dfcacc9c41dad457311fc4e49&#34;&gt;Не используйте &lt;code&gt;guard&lt;/code&gt; для многочисленных проверок&lt;/h2&gt;
 
 &lt;p&gt;Рассмотрим код:&lt;/p&gt;
 
@@ -496,7 +768,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 
 &lt;p&gt;В данном варианте можно протестировать каждый случай по отдельности и вы можете быть уверены, что вы проверили все случаи, иначе Xcode покажет ошибку на неразвернутых опциональных типах.&lt;/p&gt;
 
-&lt;h2 id=&#34;всегда-вносите-зависимости-даже-если-они-предназначены-только-для-тестирования&#34;&gt;Всегда вносите зависимости, даже если они предназначены только для тестирования&lt;/h2&gt;
+&lt;h2 id=&#34;всегда-вносите-зависимости-даже-если-они-предназначены-только-для-тестирования:60e2ba6dfcacc9c41dad457311fc4e49&#34;&gt;Всегда вносите зависимости, даже если они предназначены только для тестирования&lt;/h2&gt;
 
 &lt;p&gt;В swift есть удобная возможность - необязательные аргументы функций. С одной стороны вы можете указывать как использовать функцию по умолчанию, с другой - облегчить тестирование классов,  в частности зависимости мок-объектов.&lt;/p&gt;
 
@@ -515,14 +787,14 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 
 &lt;p&gt;Некоторые программисты могут внести зависимость навсегда, вместо определения значения по умолчанию. Но мне кажется, что главная задача для этого типа зависимостей - облегчить тестирование. Если вы не пишите библиотеку, ваше приложение вероятно всегда использует одну и ту же зависимость, поэтому есть смысл определить ее как зависимость по умолчанию.&lt;/p&gt;
 
-&lt;h2 id=&#34;всегда-используйте-псевдонимы-типа-typealias-для-завершающих-обработчиков-если-это-возможно&#34;&gt;Всегда используйте псевдонимы типа(&lt;code&gt;typealias&lt;/code&gt;) для завершающих обработчиков(если это возможно)&lt;/h2&gt;
+&lt;h2 id=&#34;всегда-используйте-псевдонимы-типа-typealias-для-завершающих-обработчиков-если-это-возможно:60e2ba6dfcacc9c41dad457311fc4e49&#34;&gt;Всегда используйте псевдонимы типа(&lt;code&gt;typealias&lt;/code&gt;) для завершающих обработчиков(если это возможно)&lt;/h2&gt;
 
 &lt;p&gt;Несмотря на то, что синтаксис замыканий может быть &lt;a href=&#34;http://fuckingclosuresyntax.com/&#34;&gt;запутывающим&lt;/a&gt;,  синтаксис для псевдонима замыкания очевидно проще, чем эквивалентный &lt;code&gt;typedef&lt;/code&gt; в Objective-C. Поэтому всегда объявляйте псевдоним для завершающих обработчиков(конечно если они не содержат обобщенных типов).&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;typealias SomethingCompletion = (result: SomeType) -&amp;gt; Void
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;используйте-перечисления-enum-для-уменьшения-неопределенности&#34;&gt;Используйте перечисления(&lt;code&gt;enum&lt;/code&gt;) для уменьшения неопределенности&lt;/h2&gt;
+&lt;h2 id=&#34;используйте-перечисления-enum-для-уменьшения-неопределенности:60e2ba6dfcacc9c41dad457311fc4e49&#34;&gt;Используйте перечисления(&lt;code&gt;enum&lt;/code&gt;) для уменьшения неопределенности&lt;/h2&gt;
 
 &lt;p&gt;В этом фрагменте кода я передаю завершающему обработчику кортеж, который повышает неопределенность.&lt;/p&gt;
 
@@ -561,7 +833,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 
 &lt;p&gt;Теперь стало абсолютно ясно, что если вызов функции был успешен, мы получим действительный результат(и мы даже будем знать его тип). И наоборот, если вызов неуспешен мы получим ошибку. Результат может быть либо успешным, либо не успешным. Без неопределенности.&lt;/p&gt;
 
-&lt;h2 id=&#34;трюк-для-обобщенного-завершающего-обработчика&#34;&gt;Трюк для обобщенного завершающего обработчика&lt;/h2&gt;
+&lt;h2 id=&#34;трюк-для-обобщенного-завершающего-обработчика:60e2ba6dfcacc9c41dad457311fc4e49&#34;&gt;Трюк для обобщенного завершающего обработчика&lt;/h2&gt;
 
 &lt;p&gt;Предположим у вас есть функция, объявленная в протоколе:&lt;/p&gt;
 
@@ -588,7 +860,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 
 &lt;p&gt;Это полная противоположность блокам в &lt;code&gt;Objective C&lt;/code&gt;, где мы должны были бы объявить аргумент завершающего обработчика с типом &lt;code&gt;id&lt;/code&gt; и вызывающий объект сказал бы компилятору какой тип объекта он ожидает получить назад при реализации завершающего обработчика.&lt;/p&gt;
 
-&lt;h2 id=&#34;лучшие-практики-замыканий&#34;&gt;Лучшие практики замыканий&lt;/h2&gt;
+&lt;h2 id=&#34;лучшие-практики-замыканий:60e2ba6dfcacc9c41dad457311fc4e49&#34;&gt;Лучшие практики замыканий&lt;/h2&gt;
 
 &lt;p&gt;Я пытаюсь сохранять замыкания как можно более краткими и лаконичными.&lt;/p&gt;
 
@@ -615,7 +887,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;p-s&#34;&gt;P.S&lt;/h4&gt;
+&lt;h4 id=&#34;p-s:60e2ba6dfcacc9c41dad457311fc4e49&#34;&gt;P.S&lt;/h4&gt;
 
 &lt;p&gt;Я знаю, что перевод ужасен, именно поэтому я и сделал его(несмотря на то, что в статье используется простой англиский). Но невозможно улучшить какой-либо навык, ничего не делая. The growth mindset и все такое.&lt;/p&gt;
 
@@ -631,7 +903,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
       <guid>http://rag0n.github.io/2015/10/24/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/</guid>
       <description>
 
-&lt;h3 id=&#34;используя-классический-способ&#34;&gt;Используя классический способ&lt;/h3&gt;
+&lt;h3 id=&#34;используя-классический-способ:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя классический способ&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -657,7 +929,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-смешанный-способ-классический-visual-format-language&#34;&gt;Используя смешанный способ(Классический + Visual Format Language)&lt;/h3&gt;
+&lt;h3 id=&#34;используя-смешанный-способ-классический-visual-format-language:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя смешанный способ(Классический + Visual Format Language)&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -686,7 +958,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-только-visual-format-language&#34;&gt;Используя только Visual Format Language&lt;/h3&gt;
+&lt;h3 id=&#34;используя-только-visual-format-language:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя только Visual Format Language&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -704,7 +976,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-autoresizing-mask&#34;&gt;Используя Autoresizing mask&lt;/h3&gt;
+&lt;h3 id=&#34;используя-autoresizing-mask:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя Autoresizing mask&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -721,7 +993,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-anchor-только-для-ios-9&#34;&gt;Используя Anchor(только для iOS 9)&lt;/h3&gt;
+&lt;h3 id=&#34;используя-anchor-только-для-ios-9:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя Anchor(только для iOS 9)&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -739,7 +1011,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-snapkit-сторонее-по&#34;&gt;Используя SnapKit(сторонее ПО)&lt;/h3&gt;
+&lt;h3 id=&#34;используя-snapkit-сторонее-по:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя SnapKit(сторонее ПО)&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -759,7 +1031,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 
 &lt;p&gt;В этом случае не требуется ни newView.translatesAutoresizingMaskIntoConstraints = false, ни активация constraints.&lt;/p&gt;
 
-&lt;h3 id=&#34;используя-cartography-стороннее-по&#34;&gt;Используя Cartography(стороннее ПО)&lt;/h3&gt;
+&lt;h3 id=&#34;используя-cartography-стороннее-по:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя Cartography(стороннее ПО)&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
