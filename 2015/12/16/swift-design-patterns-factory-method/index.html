@@ -51,7 +51,7 @@
     },
     "datePublished": "2015-12-16",
     "description": "Описание и реализация паттерна проектирования Factory Method на языке Swift 2.",
-    "wordCount":  847 
+    "wordCount":  848 
   }
 </script>
 
@@ -166,7 +166,7 @@
     &middot; by rag0n
   
   &middot; Read in about 4 min
-  &middot; (847 Words)
+  &middot; (848 Words)
   <br>
   
 <a class="label" href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B">паттерны</a>
@@ -182,19 +182,19 @@
   <div class="container content">
   
 
-<h3 id="зачем-нужен:a101eda76dab66e01165dbf941fe4575">Зачем нужен?</h3>
+<h3 id="зачем-нужен">Зачем нужен?</h3>
 
 <p>Паттерн Factory method применяется когда создатель(фреймворк) должен стандартизировать архитектурную модель для клиентов и одновременно позволить клиентам определять свои объекты предметной области(domain objets).</p>
 
 <p>Обеспечивает соблюдение принципа инверсии зависимостей. Уменьшает связанность классов.</p>
 
-<h3 id="определение:a101eda76dab66e01165dbf941fe4575">Определение</h3>
+<h3 id="определение">Определение</h3>
 
 <ul>
 <li>определяет интерфейс создания объекта, но позволяет субклассам выбрать класс создаваемого экземпляра. Таким образом, Фабричный метод делегирует операцию создания экземпляра субклассам.</li>
 </ul>
 
-<h3 id="реализация:a101eda76dab66e01165dbf941fe4575">Реализация</h3>
+<h3 id="реализация">Реализация</h3>
 
 <p>Суперкласс определяет стандартное поведение и делегирует детали создания субклассам, определенным пользователем. Для создания объектов используется наследование.</p>
 
@@ -208,13 +208,13 @@
 <li>Рассмотрите возможность создания внутреннего &laquo;object pool&raquo;, который позволит возвращать один и тот же экземпляр, вместо создания нового каждый раз</li>
 </ol>
 
-<h3 id="пример:a101eda76dab66e01165dbf941fe4575">Пример</h3>
+<h3 id="пример">Пример</h3>
 
 <p>Фабричный метод похож на абстрактную фабрику, но в нем отсутствует акцент на семействах.</p>
 
 <p>Допустим у нас есть сеть пиццерий по всей стране. В Нью-Йорке жители любят тонкий слой теста, немного специй. В Чикаго - толстый слой теста, много сыра.</p>
 
-<p>Мы хотим, чтобы процесс приготовления был стандартизирован и одинаков во всех пиццерий, но при этом учитывались особенности местных жителей.</p>
+<p>Мы хотим, чтобы процесс приготовления был стандартизирован и одинаков во всех пиццерий, но при этом учитывались особенности местной кухни.</p>
 
 <p>Для этого объявим общий интерфейс для пиццерий, при этом делегируем реализацию фабричного метода субклассам:</p>
 
@@ -437,11 +437,11 @@ Chikago style Deep Dish Cheese Pizza
 }
 </code></pre>
 
-<h4 id="реализация-паттерна-strategy:a101eda76dab66e01165dbf941fe4575">Реализация паттерна Strategy:</h4>
+<h4 id="реализация-паттерна-factory-method">Реализация паттерна Factory Method:</h4>
 
 <ul>
-<li><a href="https://github.com/Rag0n/hfdp/blob/master/Decorator.playground/Contents.swift">Мой playground с полной реализацией</a></li>
-<li><a href="https://github.com/ochococo/Design-Patterns-In-Swift#-abstract-factory">Swift design patterns</a></li>
+<li><a href="https://github.com/Rag0n/hfdp/blob/master/FactoryMethod.playground/Contents.swift">Мой playground с полной реализацией</a></li>
+<li><a href="https://github.com/ochococo/Design-Patterns-In-Swift#-factory-method">Swift design patterns</a></li>
 </ul>
 
 </div>
@@ -459,6 +459,10 @@ Chikago style Deep Dish Cheese Pizza
     </a>
     
 
+    
+    <a class="next" href="http://rag0n.github.io/2015/12/17/swift-design-patterns-abstract-factory/" title="Swift Design Patterns: Abstract Factory">
+      Next
+    </a>
     
 
   

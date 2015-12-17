@@ -3,8 +3,13 @@
   
   <url>
     <loc>http://rag0n.github.io/</loc>
-    <lastmod>2015-12-16T17:15:56+03:00</lastmod>
+    <lastmod>2015-12-17T10:18:13+03:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://rag0n.github.io/2015/12/17/swift-design-patterns-abstract-factory/</loc>
+    <lastmod>2015-12-17T10:18:13+03:00</lastmod>
   </url>
   
   <url>
