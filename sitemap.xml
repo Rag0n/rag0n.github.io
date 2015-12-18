@@ -3,8 +3,18 @@
   
   <url>
     <loc>http://rag0n.github.io/</loc>
-    <lastmod>2015-12-17T10:18:13+03:00</lastmod>
+    <lastmod>2015-12-18T14:04:01+03:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://rag0n.github.io/2015/12/18/swift-design-patterns-singleton/</loc>
+    <lastmod>2015-12-18T14:04:01+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://rag0n.github.io/2015/12/18/swift-design-patterns-command/</loc>
+    <lastmod>2015-12-18T14:00:39+03:00</lastmod>
   </url>
   
   <url>

@@ -9,8 +9,236 @@
     <managingEditor>alexander.ragon@gmail.com (Alexander Guschin)</managingEditor>
     <webMaster>alexander.ragon@gmail.com (Alexander Guschin)</webMaster>
     <copyright>(c) 2015 Rag0n</copyright>
-    <lastBuildDate>Thu, 17 Dec 2015 10:18:13 +0300</lastBuildDate>
+    <lastBuildDate>Fri, 18 Dec 2015 14:04:01 +0300</lastBuildDate>
     <atom:link href="http://rag0n.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Swift Design Patterns: Singleton</title>
+      <link>http://rag0n.github.io/2015/12/18/swift-design-patterns-singleton/</link>
+      <pubDate>Fri, 18 Dec 2015 14:04:01 +0300</pubDate>
+      <author>alexander.ragon@gmail.com (Alexander Guschin)</author>
+      <guid>http://rag0n.github.io/2015/12/18/swift-design-patterns-singleton/</guid>
+      <description>
+
+&lt;h3 id=&#34;зачем-нужен:2560a7f6c1a6576386d96030609a3d5a&#34;&gt;Зачем нужен?&lt;/h3&gt;
+
+&lt;p&gt;Паттерн Singleton применяется, если в приложении должен использоваться один и только один экземпляр класса. Кроме того, желательно иметь ленивую инициализацию и глобальный доступ.&lt;/p&gt;
+
+&lt;h3 id=&#34;определение:2560a7f6c1a6576386d96030609a3d5a&#34;&gt;Определение&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;гарантирует, что класс имеет только один экземпляр, и предоставляет глобальную точку доступа к этому экземпляру&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;реализация:2560a7f6c1a6576386d96030609a3d5a&#34;&gt;Реализация&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Объявите статичный аттрибут-константу в классе&lt;/li&gt;
+&lt;li&gt;Используйте приватный метод доступа у инициализатора&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;пример:2560a7f6c1a6576386d96030609a3d5a&#34;&gt;Пример&lt;/h3&gt;
+
+&lt;p&gt;Реализация на языке Swift получается в одну строчку. Связано это с тем, что для глобальных и статичных переменных структур, перечислений и классов используется ленивая инициализация. Ленивая инициализация запускается единожды и является потокобезопасной(атомарной), т.к используется &lt;code&gt;dispatch_once&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;class SomeClass {
+    static let sharedInstance = SomeClass()
+    private init() { }
+    
+    // другие методы
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;реализация-паттерна-singleton:2560a7f6c1a6576386d96030609a3d5a&#34;&gt;Реализация паттерна Singleton:&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Singleton.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ochococo/Design-Patterns-In-Swift#-singleton&#34;&gt;Swift design patterns&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Swift Design Patterns: Command</title>
+      <link>http://rag0n.github.io/2015/12/18/swift-design-patterns-command/</link>
+      <pubDate>Fri, 18 Dec 2015 14:00:39 +0300</pubDate>
+      <author>alexander.ragon@gmail.com (Alexander Guschin)</author>
+      <guid>http://rag0n.github.io/2015/12/18/swift-design-patterns-command/</guid>
+      <description>
+
+&lt;h3 id=&#34;зачем-нужен:18f42655bc34c316ea561fdfae1d14c2&#34;&gt;Зачем нужен?&lt;/h3&gt;
+
+&lt;p&gt;Паттерн Command применяется, когда необходимо выполнять команды(операции, запросы), без знания того, какие функции должны вызываться и даже того, кто должен выполнять эти функции. Паттерн инкапсулирует вычислительные блоки(получателя + набор операций). Его можно применять в планировщиках, различных пулах, очередях задач.&lt;/p&gt;
+
+&lt;p&gt;Обеспечивает соблюдение принципа инверсии зависимостей. Уменьшает связанность классов.&lt;/p&gt;
+
+&lt;h3 id=&#34;определение:18f42655bc34c316ea561fdfae1d14c2&#34;&gt;Определение&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;инкапсулирует запрос в виде объекта, делая возможной параметризацию клиентских объектов с различными запросами, организацию очереди или регистрацию запросов, а также поддержку отмены операций&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;реализация:18f42655bc34c316ea561fdfae1d14c2&#34;&gt;Реализация&lt;/h3&gt;
+
+&lt;p&gt;Command разъединяет(decouple) объект, который вызывает операцию от объекта, который знает как эту операцию выполнить. Для этого создается интерфейс Command, который связывает получателя с действием. Интерфейс содержит абстрактный метод &lt;code&gt;execute&lt;/code&gt;, который вызывает действия у получателя. Клиенты Command рассматривают получателя как черную коробку: когда необходимо, клиент вызывает метод &lt;code&gt;execute&lt;/code&gt; и больше его ничего не волнует.&lt;/p&gt;
+
+&lt;p&gt;Клиент, создающий команду и клиент, выполняющий команду - разные клиенты. Данное разделение обеспечивает гибкость во времени выполнения и последовательности команд. Инкапсуляция команд в виде объекто делает возможным их передачу/хранение/загрузку и тд.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Определите интерфейс команды с сигнатурой метода такой как &lt;code&gt;execute()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Создайте несколько конкретных классов комманд, содержащих объект получателя, методы, которые нужно вызвать и аргументы, которые нужно передать получателю.&lt;/li&gt;
+&lt;li&gt;Инициализируйте объекты команд для каждого отложенного выполнения&lt;/li&gt;
+&lt;li&gt;Передайте объекты команд от создателя(отправителя, sender) к инициатору(invoker)&lt;/li&gt;
+&lt;li&gt;Инициатор определяет, когда выполнять команды&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;пример:18f42655bc34c316ea561fdfae1d14c2&#34;&gt;Пример&lt;/h3&gt;
+
+&lt;p&gt;Допустим у нас есть пульт управления умным домом. В нем есть возможность задать несколько устройств, и для каждого устройства есть кнопка on и off.&lt;/p&gt;
+
+&lt;p&gt;Определим интерфейс команды&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// абстрактная команда, используем для инкапсуляции классов устройств(устройство + операции)
+// в результате при добавлении новых классов устройств
+// не нужно будет изменять управляющий класс пульта(remoteControl)
+protocol Command {
+    func execute()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Создадим несколько конкретных классов команд&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// классы конкретных комманд, инкапсулируют запросы к конкретным устройствам
+class NoCommand: Command {
+    // объект-получатель
+    func execute() {
+        print(&amp;quot;No command&amp;quot;)
+    }
+}
+
+class LightOnCommand: Command {
+    // объект-получатель
+    private let light: Light
+    
+    init(light: Light) {
+        self.light = light
+    }
+    
+    func execute() {
+        // методы, которые нужно вызвать, без аргументов
+        light.on()
+    }
+}
+
+class LightOffCommand: Command {
+    // объект-получатель
+    private let light: Light
+    
+    init(light: Light) {
+        self.light = light
+    }
+    
+    func execute() {
+        // методы, которые нужно вызвать, без аргументов
+        light.off()
+    }
+}
+
+class StereoOnWithCDCommand: Command {
+    // объект-получатель
+    private let stereo: Stereo
+    
+    init(stereo: Stereo) {
+        self.stereo = stereo
+    }
+    
+    func execute() {
+        // методы, которые нужно вызвать, без аргументов
+        stereo.on()
+        stereo.setCD()
+        stereo.setVolume()
+    }
+}
+
+class GarageOpenCommand: Command {
+    // объект-получатель
+    private let garage: Garage
+    
+    init(garageDoor: Garage) {
+        self.garage = garageDoor
+    }
+    
+    func execute() {
+        // методы, которые нужно вызвать, без аргументов
+        garage.openDoor()
+    }
+}
+
+class GarageCloseCommand: Command {
+    // объект-получатель
+    private let garage: Garage
+    
+    init(garageDoor: Garage) {
+        self.garage = garageDoor
+    }
+    
+    func execute() {
+        // методы, которые нужно вызвать, без аргументов
+        garage.closeDoor()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Инициализируем объекты команд&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;let livingRoomLight = Light(site: &amp;quot;Living Room&amp;quot;)
+let livingRoomLightOn = LightOnCommand(light: livingRoomLight)
+let livingRoomLightOff = LightOffCommand(light: livingRoomLight)
+
+let kitchenLight = Light(site: &amp;quot;Kitchen&amp;quot;)
+let kitchenLightOn = LightOnCommand(light: kitchenLight)
+let kitchenLightOff = LightOffCommand(light: kitchenLight)
+
+let garage = Garage()
+let garageOpen = GarageOpenCommand(garageDoor: garage)
+let garageClose = GarageCloseCommand(garageDoor: garage)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Передадим объекты команд от создателя(creator) к инициатору(invoker)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;let remote = RemoteControl()
+remote.setCommand(0, onCommand: livingRoomLightOn, offCommand: livingRoomLightOff)
+remote.setCommand(1, onCommand: kitchenLightOn, offCommand: kitchenLightOff)
+remote.setCommand(2, onCommand: garageOpen, offCommand: garageClose)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;В нашем случае команды выполняются по нажатию кнопок на пульте управления&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;remote.onButtonPressed(0)
+remote.offButtonPressed(0)
+remote.undoButtonPressed()
+
+remote.onButtonPressed(1)
+remote.offButtonPressed(1)
+
+remote.onButtonPressed(2)
+remote.offButtonPressed(2)
+
+remote.onButtonPressed(3)
+remote.offButtonPressed(3)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;В качестве другого примера можно рассмотреть ресторан. Командой в данном случае будет заказ. Посетитель - клиент-создатель(client, creator), официантка - инициатор, повар - получатель.&lt;/p&gt;
+
+&lt;h4 id=&#34;реализация-паттерна-command:18f42655bc34c316ea561fdfae1d14c2&#34;&gt;Реализация паттерна Command:&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Command.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ochococo/Design-Patterns-In-Swift#-command&#34;&gt;Swift design patterns&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Swift Design Patterns: Abstract Factory</title>
@@ -20,19 +248,19 @@
       <guid>http://rag0n.github.io/2015/12/17/swift-design-patterns-abstract-factory/</guid>
       <description>
 
-&lt;h3 id=&#34;зачем-нужен:a89f4ea0996d5b707282935ce6821d4f&#34;&gt;Зачем нужен?&lt;/h3&gt;
+&lt;h3 id=&#34;зачем-нужен:f65e83a1a91be34a99274f3194857efa&#34;&gt;Зачем нужен?&lt;/h3&gt;
 
 &lt;p&gt;Паттерн Abstract factory применяется для инкапсуляции зависимостей(операционная система, базы данных и тд). Клиент используют интерфейс, предоставляемый фабрикой, а конкретная реализация(конкретная фабрика) определяется на этапе исполнения.&lt;/p&gt;
 
 &lt;p&gt;Обеспечивает соблюдение принципа инверсии зависимостей. Уменьшает связанность классов.&lt;/p&gt;
 
-&lt;h3 id=&#34;определение:a89f4ea0996d5b707282935ce6821d4f&#34;&gt;Определение&lt;/h3&gt;
+&lt;h3 id=&#34;определение:f65e83a1a91be34a99274f3194857efa&#34;&gt;Определение&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;предоставляет интерфейс создания семейства взаимосвязанных или взаимозависимых объектов без указания их конкретных классов&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;реализация:a89f4ea0996d5b707282935ce6821d4f&#34;&gt;Реализация&lt;/h3&gt;
+&lt;h3 id=&#34;реализация:f65e83a1a91be34a99274f3194857efa&#34;&gt;Реализация&lt;/h3&gt;
 
 &lt;p&gt;Объект фабрики берет на себя ответственность за создание сервисов для всего семейства продуктов. Клиенты не создают объекты напрямую, а делегируют создание фабрике. Таким образом, для создания объектов используется композиция.&lt;/p&gt;
 
@@ -44,7 +272,7 @@
 &lt;li&gt;Клиент должен использовать фабричные методы конкретной фабрики для создания продуктов, конкретную фабрику получает через инициализатор(используется делегация)&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;пример:a89f4ea0996d5b707282935ce6821d4f&#34;&gt;Пример&lt;/h3&gt;
+&lt;h3 id=&#34;пример:f65e83a1a91be34a99274f3194857efa&#34;&gt;Пример&lt;/h3&gt;
 
 &lt;p&gt;Допустим у нас есть сеть пиццерий по всей стране. В Нью-Йорке жители любят тонкий слой теста, одни специи. В Чикаго - толстый слой теста, другие специи.&lt;/p&gt;
 
@@ -308,7 +536,7 @@ Chikago Style Cheese Pizza
 *\
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;реализация-паттерна-abstract-factory:a89f4ea0996d5b707282935ce6821d4f&#34;&gt;Реализация паттерна Abstract Factory:&lt;/h4&gt;
+&lt;h4 id=&#34;реализация-паттерна-abstract-factory:f65e83a1a91be34a99274f3194857efa&#34;&gt;Реализация паттерна Abstract Factory:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/FactoryAbstract.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
@@ -325,19 +553,19 @@ Chikago Style Cheese Pizza
       <guid>http://rag0n.github.io/2015/12/16/swift-design-patterns-factory-method/</guid>
       <description>
 
-&lt;h3 id=&#34;зачем-нужен&#34;&gt;Зачем нужен?&lt;/h3&gt;
+&lt;h3 id=&#34;зачем-нужен:2473779ea5617c0f0f76721eb7a89d68&#34;&gt;Зачем нужен?&lt;/h3&gt;
 
 &lt;p&gt;Паттерн Factory method применяется когда создатель(фреймворк) должен стандартизировать архитектурную модель для клиентов и одновременно позволить клиентам определять свои объекты предметной области(domain objets).&lt;/p&gt;
 
 &lt;p&gt;Обеспечивает соблюдение принципа инверсии зависимостей. Уменьшает связанность классов.&lt;/p&gt;
 
-&lt;h3 id=&#34;определение&#34;&gt;Определение&lt;/h3&gt;
+&lt;h3 id=&#34;определение:2473779ea5617c0f0f76721eb7a89d68&#34;&gt;Определение&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;определяет интерфейс создания объекта, но позволяет субклассам выбрать класс создаваемого экземпляра. Таким образом, Фабричный метод делегирует операцию создания экземпляра субклассам.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;реализация&#34;&gt;Реализация&lt;/h3&gt;
+&lt;h3 id=&#34;реализация:2473779ea5617c0f0f76721eb7a89d68&#34;&gt;Реализация&lt;/h3&gt;
 
 &lt;p&gt;Суперкласс определяет стандартное поведение и делегирует детали создания субклассам, определенным пользователем. Для создания объектов используется наследование.&lt;/p&gt;
 
@@ -351,7 +579,7 @@ Chikago Style Cheese Pizza
 &lt;li&gt;Рассмотрите возможность создания внутреннего &amp;laquo;object pool&amp;raquo;, который позволит возвращать один и тот же экземпляр, вместо создания нового каждый раз&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;пример&#34;&gt;Пример&lt;/h3&gt;
+&lt;h3 id=&#34;пример:2473779ea5617c0f0f76721eb7a89d68&#34;&gt;Пример&lt;/h3&gt;
 
 &lt;p&gt;Фабричный метод похож на абстрактную фабрику, но в нем отсутствует акцент на семействах.&lt;/p&gt;
 
@@ -580,7 +808,7 @@ Chikago style Deep Dish Cheese Pizza
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;реализация-паттерна-factory-method&#34;&gt;Реализация паттерна Factory Method:&lt;/h4&gt;
+&lt;h4 id=&#34;реализация-паттерна-factory-method:2473779ea5617c0f0f76721eb7a89d68&#34;&gt;Реализация паттерна Factory Method:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/FactoryMethod.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
@@ -597,20 +825,20 @@ Chikago style Deep Dish Cheese Pizza
       <guid>http://rag0n.github.io/2015/12/15/swift-design-patterns-decorator/</guid>
       <description>
 
-&lt;h3 id=&#34;зачем-нужен:0c84eb7d0eaa4029d8f0f8044561ba6b&#34;&gt;Зачем нужен?&lt;/h3&gt;
+&lt;h3 id=&#34;зачем-нужен:99c697297f39ade8ec395e939c883fbf&#34;&gt;Зачем нужен?&lt;/h3&gt;
 
 &lt;p&gt;Паттерн Decorator применяется для динамического добавления поведения или состояния объектам. Наследования не является допустимой альтернативой, т.к оно статично(этап компиляции) и применяется ко всему классу.&lt;/p&gt;
 
 &lt;p&gt;Соответствует open/closed принципу SOLID: класс открыт для расширения, но закрыт для изменения&lt;/p&gt;
 
-&lt;h3 id=&#34;определение:0c84eb7d0eaa4029d8f0f8044561ba6b&#34;&gt;Определение&lt;/h3&gt;
+&lt;h3 id=&#34;определение:99c697297f39ade8ec395e939c883fbf&#34;&gt;Определение&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;динамически наделяет объект новыми возможностями и является гибкой альтернативой наследованию в области расширения функциональности&lt;/li&gt;
 &lt;li&gt;декорирование базового объекта путем рекурсивного завертывания(wrapping) дополнений, определяемых пользователем&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;реализация:0c84eb7d0eaa4029d8f0f8044561ba6b&#34;&gt;Реализация&lt;/h3&gt;
+&lt;h3 id=&#34;реализация:99c697297f39ade8ec395e939c883fbf&#34;&gt;Реализация&lt;/h3&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Определите общий интерфейс(таким образом классы будут взаимозаменяемы)&lt;/li&gt;
@@ -624,7 +852,7 @@ Chikago style Deep Dish Cheese Pizza
 &lt;li&gt;Клиент конфигурирует тип и порядок базового и дополнительных компонентов&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;пример:0c84eb7d0eaa4029d8f0f8044561ba6b&#34;&gt;Пример&lt;/h3&gt;
+&lt;h3 id=&#34;пример:99c697297f39ade8ec395e939c883fbf&#34;&gt;Пример&lt;/h3&gt;
 
 &lt;p&gt;Допустим мы владеем кафе и у нас в продаже имеются различные виды кофе:&lt;/p&gt;
 
@@ -750,7 +978,7 @@ myDarkRoast = Whip(beverage: myDarkRoast)
 &lt;li&gt;конкретные классы декоратора - игрушки, гирлянда и тд&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&#34;реализация-паттерна-decorator:0c84eb7d0eaa4029d8f0f8044561ba6b&#34;&gt;Реализация паттерна Decorator:&lt;/h4&gt;
+&lt;h4 id=&#34;реализация-паттерна-decorator:99c697297f39ade8ec395e939c883fbf&#34;&gt;Реализация паттерна Decorator:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Decorator.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
@@ -767,7 +995,7 @@ myDarkRoast = Whip(beverage: myDarkRoast)
       <guid>http://rag0n.github.io/2015/12/04/swift-design-patterns-observer/</guid>
       <description>
 
-&lt;h3 id=&#34;зачем-нужен:a5161de039683433187a481416fc263d&#34;&gt;Зачем нужен?&lt;/h3&gt;
+&lt;h3 id=&#34;зачем-нужен&#34;&gt;Зачем нужен?&lt;/h3&gt;
 
 &lt;p&gt;Паттерн Observer часто применяется для определения бизнес-логики(data model) в субъекте и делегирования view функций различным несвязанным наблюдателям. Т.е применяется во &amp;laquo;View&amp;raquo; части паттерна MVC.&lt;/p&gt;
 
@@ -780,14 +1008,14 @@ myDarkRoast = Whip(beverage: myDarkRoast)
 
 &lt;p&gt;Соответствует Dependency Inversion принципу SOLID: субьект зависит не от наблюдателей, а от интерфейса Observer. Т.о наблюдателями могут быть любые объекты, реализующие данный интерфейс. В результате получаем слабую связанность(low coupling) между объектами.&lt;/p&gt;
 
-&lt;h3 id=&#34;определение:a5161de039683433187a481416fc263d&#34;&gt;Определение&lt;/h3&gt;
+&lt;h3 id=&#34;определение&#34;&gt;Определение&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;определяет отношение один-ко-многим таким образом, что при изменении состояния одного объекта происходит оповещение и обновление всех остальных зависимых объектов&lt;/li&gt;
 &lt;li&gt;инкапсулирует основные(независимые) компоненты в абстракции Subject и изменяющиеся(опциональные) компоненты в Observers.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;реализация:a5161de039683433187a481416fc263d&#34;&gt;Реализация&lt;/h3&gt;
+&lt;h3 id=&#34;реализация&#34;&gt;Реализация&lt;/h3&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Разграничьте независимую(базовую, core) функциональность и зависимую(или опциональную) функциональность&lt;/li&gt;
@@ -799,7 +1027,7 @@ myDarkRoast = Whip(beverage: myDarkRoast)
 &lt;li&gt;Субьект может выполнить активную доставку или наблюдатели могут сами получать необходимую информацию&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;пример:a5161de039683433187a481416fc263d&#34;&gt;Пример&lt;/h3&gt;
+&lt;h3 id=&#34;пример&#34;&gt;Пример&lt;/h3&gt;
 
 &lt;p&gt;В качестве примера: допустим у нас есть метеостанция, которая вызывает метод measurementsChanged у класса WeatherData при изменении температуры/влажности/давления.&lt;/p&gt;
 
@@ -881,7 +1109,7 @@ myDarkRoast = Whip(beverage: myDarkRoast)
 
 &lt;p&gt;В данной реализации мы используем протокол DisplayElement, т.к предполагаем что у нас имеется несколько классов которые по разному представляют данные.&lt;/p&gt;
 
-&lt;h4 id=&#34;реализация-паттерна-observer:a5161de039683433187a481416fc263d&#34;&gt;Реализация паттерна Observer:&lt;/h4&gt;
+&lt;h4 id=&#34;реализация-паттерна-observer&#34;&gt;Реализация паттерна Observer:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Observer.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
@@ -898,20 +1126,20 @@ myDarkRoast = Whip(beverage: myDarkRoast)
       <guid>http://rag0n.github.io/2015/12/01/swift-design-patterns-strategy/</guid>
       <description>
 
-&lt;h3 id=&#34;зачем-нужен:96fad1e768598ed120295db521ddbb63&#34;&gt;Зачем нужен?&lt;/h3&gt;
+&lt;h3 id=&#34;зачем-нужен:010736ab8fdfc1cfa693a6e5a7960263&#34;&gt;Зачем нужен?&lt;/h3&gt;
 
 &lt;p&gt;Паттерн Strategy применяется для уменьшения связанности. В двух словах: программируйте на уровне интерфейсов, а не реализаций.&lt;/p&gt;
 
 &lt;p&gt;Соответствует open/closed принципу SOLID: изменение конкретных классов не влияет на клиента, т.к он зависит только от интерфейса.&lt;/p&gt;
 
-&lt;h3 id=&#34;определение:96fad1e768598ed120295db521ddbb63&#34;&gt;Определение&lt;/h3&gt;
+&lt;h3 id=&#34;определение:010736ab8fdfc1cfa693a6e5a7960263&#34;&gt;Определение&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;определяет семейство алгоритмов(поведений), инкапсулирует и обеспечивает их взаимозаменяемость. Позволяет модифицировать алгоритмы независимо от их использования на стороне клиента.&lt;/li&gt;
 &lt;li&gt;инкапсулируем абстракцию в интерфейсе, скрываем реализацию в конкретных классах&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;реализация:96fad1e768598ed120295db521ddbb63&#34;&gt;Реализация&lt;/h3&gt;
+&lt;h3 id=&#34;реализация:010736ab8fdfc1cfa693a6e5a7960263&#34;&gt;Реализация&lt;/h3&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Найдите алгоритм(поведение)&lt;/li&gt;
@@ -920,7 +1148,7 @@ myDarkRoast = Whip(beverage: myDarkRoast)
 &lt;li&gt;Свяжите клиента алгоритма с интерфейсом&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;пример:96fad1e768598ed120295db521ddbb63&#34;&gt;Пример&lt;/h3&gt;
+&lt;h3 id=&#34;пример:010736ab8fdfc1cfa693a6e5a7960263&#34;&gt;Пример&lt;/h3&gt;
 
 &lt;p&gt;Допустим у нас есть утки. Утки могут крякать по разному: кряканье, писк, а могут и вовсе не крякать. Алгоритмом в данном случае будет способ кряканья.&lt;/p&gt;
 
@@ -985,7 +1213,7 @@ class Squeak: QuackBehavior {
 
 &lt;p&gt;Стоить заметить, что вместо создания конкретных классов можно применить протоколо-ориентированный подход, а точнее использование миксинов. Т.е создаем миксины(содержащие поведение), с помощью расширений протокола добавляем реализацию по умолчанию, далее конфигурируем конкретные классы с необходимым набором поведений. В результате дублирования кода не будет.&lt;/p&gt;
 
-&lt;h4 id=&#34;подробнее-про-протоколо-ориентированный-подход:96fad1e768598ed120295db521ddbb63&#34;&gt;Подробнее про протоколо-ориентированный подход:&lt;/h4&gt;
+&lt;h4 id=&#34;подробнее-про-протоколо-ориентированный-подход:010736ab8fdfc1cfa693a6e5a7960263&#34;&gt;Подробнее про протоколо-ориентированный подход:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;http://swiftbook.ru/blog/introducing-protocol-oriented-programming-in-swift-2&#34;&gt;Знакомство с протоколо-ориентированным программированием в Swift 2&lt;/a&gt;&lt;/li&gt;
@@ -994,7 +1222,7 @@ class Squeak: QuackBehavior {
 &lt;li&gt;&lt;a href=&#34;http://alisoftware.github.io/swift/protocol/2015/11/08/mixins-over-inheritance/#fnref2&#34;&gt;Mixins over Inheritance&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&#34;реализация-паттерна-strategy:96fad1e768598ed120295db521ddbb63&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
+&lt;h4 id=&#34;реализация-паттерна-strategy:010736ab8fdfc1cfa693a6e5a7960263&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Strategy.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
@@ -1208,7 +1436,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
       <guid>http://rag0n.github.io/2015/10/24/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/</guid>
       <description>
 
-&lt;h3 id=&#34;используя-классический-способ:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя классический способ&lt;/h3&gt;
+&lt;h3 id=&#34;используя-классический-способ&#34;&gt;Используя классический способ&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -1234,7 +1462,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-смешанный-способ-классический-visual-format-language:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя смешанный способ(Классический + Visual Format Language)&lt;/h3&gt;
+&lt;h3 id=&#34;используя-смешанный-способ-классический-visual-format-language&#34;&gt;Используя смешанный способ(Классический + Visual Format Language)&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -1263,7 +1491,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-только-visual-format-language:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя только Visual Format Language&lt;/h3&gt;
+&lt;h3 id=&#34;используя-только-visual-format-language&#34;&gt;Используя только Visual Format Language&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -1281,7 +1509,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-autoresizing-mask:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя Autoresizing mask&lt;/h3&gt;
+&lt;h3 id=&#34;используя-autoresizing-mask&#34;&gt;Используя Autoresizing mask&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -1298,7 +1526,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-anchor-только-для-ios-9:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя Anchor(только для iOS 9)&lt;/h3&gt;
+&lt;h3 id=&#34;используя-anchor-только-для-ios-9&#34;&gt;Используя Anchor(только для iOS 9)&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -1316,7 +1544,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-snapkit-сторонее-по:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя SnapKit(сторонее ПО)&lt;/h3&gt;
+&lt;h3 id=&#34;используя-snapkit-сторонее-по&#34;&gt;Используя SnapKit(сторонее ПО)&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -1336,7 +1564,7 @@ guard let authors = json[&amp;quot;authors&amp;quot;] else {
 
 &lt;p&gt;В этом случае не требуется ни newView.translatesAutoresizingMaskIntoConstraints = false, ни активация constraints.&lt;/p&gt;
 
-&lt;h3 id=&#34;используя-cartography-стороннее-по:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя Cartography(стороннее ПО)&lt;/h3&gt;
+&lt;h3 id=&#34;используя-cartography-стороннее-по&#34;&gt;Используя Cartography(стороннее ПО)&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()

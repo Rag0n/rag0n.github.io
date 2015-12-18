@@ -20,7 +20,7 @@
       <guid>http://rag0n.github.io/2015/10/24/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/</guid>
       <description>
 
-&lt;h3 id=&#34;используя-классический-способ:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя классический способ&lt;/h3&gt;
+&lt;h3 id=&#34;используя-классический-способ&#34;&gt;Используя классический способ&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -46,7 +46,7 @@
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-смешанный-способ-классический-visual-format-language:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя смешанный способ(Классический + Visual Format Language)&lt;/h3&gt;
+&lt;h3 id=&#34;используя-смешанный-способ-классический-visual-format-language&#34;&gt;Используя смешанный способ(Классический + Visual Format Language)&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -75,7 +75,7 @@
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-только-visual-format-language:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя только Visual Format Language&lt;/h3&gt;
+&lt;h3 id=&#34;используя-только-visual-format-language&#34;&gt;Используя только Visual Format Language&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -93,7 +93,7 @@
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-autoresizing-mask:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя Autoresizing mask&lt;/h3&gt;
+&lt;h3 id=&#34;используя-autoresizing-mask&#34;&gt;Используя Autoresizing mask&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -110,7 +110,7 @@
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-anchor-только-для-ios-9:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя Anchor(только для iOS 9)&lt;/h3&gt;
+&lt;h3 id=&#34;используя-anchor-только-для-ios-9&#34;&gt;Используя Anchor(только для iOS 9)&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -128,7 +128,7 @@
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;используя-snapkit-сторонее-по:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя SnapKit(сторонее ПО)&lt;/h3&gt;
+&lt;h3 id=&#34;используя-snapkit-сторонее-по&#34;&gt;Используя SnapKit(сторонее ПО)&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
@@ -148,7 +148,7 @@
 
 &lt;p&gt;В этом случае не требуется ни newView.translatesAutoresizingMaskIntoConstraints = false, ни активация constraints.&lt;/p&gt;
 
-&lt;h3 id=&#34;используя-cartography-стороннее-по:a2c4d5e5e44325b48ff74c80ea46f4e3&#34;&gt;Используя Cartography(стороннее ПО)&lt;/h3&gt;
+&lt;h3 id=&#34;используя-cartography-стороннее-по&#34;&gt;Используя Cartography(стороннее ПО)&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;override func viewDidLoad() {
     super.viewDidLoad()
