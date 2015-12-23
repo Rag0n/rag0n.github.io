@@ -9,8 +9,119 @@
     <managingEditor>alexander.ragon@gmail.com (Alexander Guschin)</managingEditor>
     <webMaster>alexander.ragon@gmail.com (Alexander Guschin)</webMaster>
     <copyright>(c) 2015 Rag0n</copyright>
-    <lastBuildDate>Mon, 21 Dec 2015 11:23:10 +0300</lastBuildDate>
+    <lastBuildDate>Wed, 23 Dec 2015 11:30:57 +0300</lastBuildDate>
     <atom:link href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Swift Design Patterns: Facade</title>
+      <link>http://rag0n.github.io/2015/12/23/swift-design-patterns-facade/</link>
+      <pubDate>Wed, 23 Dec 2015 11:30:57 +0300</pubDate>
+      <author>alexander.ragon@gmail.com (Alexander Guschin)</author>
+      <guid>http://rag0n.github.io/2015/12/23/swift-design-patterns-facade/</guid>
+      <description>
+
+&lt;h3 id=&#34;зачем-нужен&#34;&gt;Зачем нужен?&lt;/h3&gt;
+
+&lt;p&gt;Паттерн Facade применяется, когда какой-то части клиента требуется упрощенный интерфейс, управляющий полной функциональностью сложной подсистемы.&lt;/p&gt;
+
+&lt;h3 id=&#34;определение&#34;&gt;Определение&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;предоставляет унифицированный интерфейс к группе интерфейсов подсистемы. Фасад определяет высокоуровневый интерфейс, упрощающий работу с подсистемой&lt;/li&gt;
+&lt;li&gt;обертывает(упаковывает) сложную подсистему в простой интерфейс&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;реализация&#34;&gt;Реализация&lt;/h3&gt;
+
+&lt;p&gt;Паттерн инкапсулирует сложную подсистему внутри одного простого интерфейса. Упрощает начальное использование подсистемы(при этом остается гибкость, если нужна сложная настройка), уменьшает связанность. К реализации нужно подходить осторожно - фасад легко превратить в god-объект, который управляет всем и вся.&lt;/p&gt;
+
+&lt;p&gt;Реализация похожа на паттерн адаптер, но задачи у них разные.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Определите упрощенный интерфейс для подсистемы/компонента&lt;/li&gt;
+&lt;li&gt;Спроектируйте класс-обертку(фасад), реализующий этот интерфейс&lt;/li&gt;
+&lt;li&gt;Фасад управляет сложностью и взаимодействием компонентов с помощью делегации методов&lt;/li&gt;
+&lt;li&gt;Клиент использует(связан) с фасадом&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;пример&#34;&gt;Пример&lt;/h3&gt;
+
+&lt;p&gt;Допустим у нас сложная система домашнего кинотеатра: проектор, усилитель, cd-плеер, экран, освещение..&lt;/p&gt;
+
+&lt;p&gt;Чтобы все это включить надо потратить много времени. Вместо этого, определим упрощенный интерфейс: watchMovie() и endMovie.&lt;/p&gt;
+
+&lt;p&gt;Реализуем класс-обертку(фасад):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;// фасад
+class HomeTheaterFacade {
+    // компоненты подсистемы, которые будет использовать фасад
+    private let ampifier: Ampifier
+    private let tuner: Tuner
+    private let cdPlayer: CDPlayer
+    private let projector: Projector
+    private let theaterLights: TheaterLights
+    private let screen: Screen
+    private let popcornPopper: PopcornPopper
+    
+    init(ampifier: Ampifier, tuner: Tuner, cdPlayer: CDPlayer,
+        projector: Projector, theaterLights: TheaterLights,
+        screen: Screen, popper: PopcornPopper) {
+        self.ampifier = ampifier
+        self.tuner = tuner
+        self.cdPlayer = cdPlayer
+        self.projector = projector
+        self.theaterLights = theaterLights
+        self.screen = screen
+        self.popcornPopper = popper
+    }
+    
+    func watchMovie(movie: String) {
+    }
+    
+    func endMovie() {
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;С помощью делегации определим взаимодействие компонентов&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-objectivec&#34;&gt;    func watchMovie(movie: String) {
+        print(&amp;quot;Get ready to watch \(movie)&amp;quot;)
+        popcornPopper.on()
+        popcornPopper.pop()
+        theaterLights.dim()
+        screen.down()
+        projector.on()
+        projector.wideScreenModeOn()
+        ampifier.on()
+        ampifier.setCD()
+        ampifier.setVolume()
+        cdPlayer.on()
+        cdPlayer.play()
+    }
+    
+    func endMovie() {
+        print(&amp;quot;Shutting down&amp;quot;)
+        popcornPopper.off()
+        screen.up()
+        projector.off()
+        ampifier.off()
+        cdPlayer.off()
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Дальше клиент использует класс-фасад HomeTheaterFacade и наслаждается просмотром фильмов.&lt;/p&gt;
+
+&lt;p&gt;В качестве другого примера - звонок в интернет магазин для заказа товара. Клиент взаимодействует с упрощенным интерфейсом(оператором), который заполняет заказ, форму оплаты, адрес доставки и тд.&lt;/p&gt;
+
+&lt;h4 id=&#34;реализация-паттерна-facade&#34;&gt;Реализация паттерна Facade:&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Facade.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ochococo/Design-Patterns-In-Swift#-façade&#34;&gt;Swift design patterns&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Swift Design Patterns: Adapter</title>
@@ -129,24 +240,24 @@ class TurkeyAdapter: Duck {
       <guid>http://rag0n.github.io/2015/12/18/swift-design-patterns-singleton/</guid>
       <description>
 
-&lt;h3 id=&#34;зачем-нужен:2560a7f6c1a6576386d96030609a3d5a&#34;&gt;Зачем нужен?&lt;/h3&gt;
+&lt;h3 id=&#34;зачем-нужен&#34;&gt;Зачем нужен?&lt;/h3&gt;
 
 &lt;p&gt;Паттерн Singleton применяется, если в приложении должен использоваться один и только один экземпляр класса. Кроме того, желательно иметь ленивую инициализацию и глобальный доступ.&lt;/p&gt;
 
-&lt;h3 id=&#34;определение:2560a7f6c1a6576386d96030609a3d5a&#34;&gt;Определение&lt;/h3&gt;
+&lt;h3 id=&#34;определение&#34;&gt;Определение&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;гарантирует, что класс имеет только один экземпляр, и предоставляет глобальную точку доступа к этому экземпляру&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;реализация:2560a7f6c1a6576386d96030609a3d5a&#34;&gt;Реализация&lt;/h3&gt;
+&lt;h3 id=&#34;реализация&#34;&gt;Реализация&lt;/h3&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Объявите статичный аттрибут-константу в классе&lt;/li&gt;
 &lt;li&gt;Используйте приватный метод доступа у инициализатора&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;пример:2560a7f6c1a6576386d96030609a3d5a&#34;&gt;Пример&lt;/h3&gt;
+&lt;h3 id=&#34;пример&#34;&gt;Пример&lt;/h3&gt;
 
 &lt;p&gt;Реализация на языке Swift получается в одну строчку. Связано это с тем, что для глобальных и статичных переменных структур, перечислений и классов используется ленивая инициализация. Ленивая инициализация запускается единожды и является потокобезопасной(атомарной), т.к используется &lt;code&gt;dispatch_once&lt;/code&gt;&lt;/p&gt;
 
@@ -158,7 +269,7 @@ class TurkeyAdapter: Duck {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;реализация-паттерна-singleton:2560a7f6c1a6576386d96030609a3d5a&#34;&gt;Реализация паттерна Singleton:&lt;/h4&gt;
+&lt;h4 id=&#34;реализация-паттерна-singleton&#34;&gt;Реализация паттерна Singleton:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Singleton.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
@@ -357,19 +468,19 @@ remote.offButtonPressed(3)
       <guid>http://rag0n.github.io/2015/12/17/swift-design-patterns-abstract-factory/</guid>
       <description>
 
-&lt;h3 id=&#34;зачем-нужен&#34;&gt;Зачем нужен?&lt;/h3&gt;
+&lt;h3 id=&#34;зачем-нужен:f65e83a1a91be34a99274f3194857efa&#34;&gt;Зачем нужен?&lt;/h3&gt;
 
 &lt;p&gt;Паттерн Abstract factory применяется для инкапсуляции зависимостей(операционная система, базы данных и тд). Клиент используют интерфейс, предоставляемый фабрикой, а конкретная реализация(конкретная фабрика) определяется на этапе исполнения.&lt;/p&gt;
 
 &lt;p&gt;Обеспечивает соблюдение принципа инверсии зависимостей. Уменьшает связанность классов.&lt;/p&gt;
 
-&lt;h3 id=&#34;определение&#34;&gt;Определение&lt;/h3&gt;
+&lt;h3 id=&#34;определение:f65e83a1a91be34a99274f3194857efa&#34;&gt;Определение&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;предоставляет интерфейс создания семейства взаимосвязанных или взаимозависимых объектов без указания их конкретных классов&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;реализация&#34;&gt;Реализация&lt;/h3&gt;
+&lt;h3 id=&#34;реализация:f65e83a1a91be34a99274f3194857efa&#34;&gt;Реализация&lt;/h3&gt;
 
 &lt;p&gt;Объект фабрики берет на себя ответственность за создание сервисов для всего семейства продуктов. Клиенты не создают объекты напрямую, а делегируют создание фабрике. Таким образом, для создания объектов используется композиция.&lt;/p&gt;
 
@@ -381,7 +492,7 @@ remote.offButtonPressed(3)
 &lt;li&gt;Клиент должен использовать фабричные методы конкретной фабрики для создания продуктов, конкретную фабрику получает через инициализатор(используется делегация)&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;пример&#34;&gt;Пример&lt;/h3&gt;
+&lt;h3 id=&#34;пример:f65e83a1a91be34a99274f3194857efa&#34;&gt;Пример&lt;/h3&gt;
 
 &lt;p&gt;Допустим у нас есть сеть пиццерий по всей стране. В Нью-Йорке жители любят тонкий слой теста, одни специи. В Чикаго - толстый слой теста, другие специи.&lt;/p&gt;
 
@@ -645,7 +756,7 @@ Chikago Style Cheese Pizza
 *\
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;реализация-паттерна-abstract-factory&#34;&gt;Реализация паттерна Abstract Factory:&lt;/h4&gt;
+&lt;h4 id=&#34;реализация-паттерна-abstract-factory:f65e83a1a91be34a99274f3194857efa&#34;&gt;Реализация паттерна Abstract Factory:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/FactoryAbstract.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
@@ -662,19 +773,19 @@ Chikago Style Cheese Pizza
       <guid>http://rag0n.github.io/2015/12/16/swift-design-patterns-factory-method/</guid>
       <description>
 
-&lt;h3 id=&#34;зачем-нужен&#34;&gt;Зачем нужен?&lt;/h3&gt;
+&lt;h3 id=&#34;зачем-нужен:2473779ea5617c0f0f76721eb7a89d68&#34;&gt;Зачем нужен?&lt;/h3&gt;
 
 &lt;p&gt;Паттерн Factory method применяется когда создатель(фреймворк) должен стандартизировать архитектурную модель для клиентов и одновременно позволить клиентам определять свои объекты предметной области(domain objets).&lt;/p&gt;
 
 &lt;p&gt;Обеспечивает соблюдение принципа инверсии зависимостей. Уменьшает связанность классов.&lt;/p&gt;
 
-&lt;h3 id=&#34;определение&#34;&gt;Определение&lt;/h3&gt;
+&lt;h3 id=&#34;определение:2473779ea5617c0f0f76721eb7a89d68&#34;&gt;Определение&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;определяет интерфейс создания объекта, но позволяет субклассам выбрать класс создаваемого экземпляра. Таким образом, Фабричный метод делегирует операцию создания экземпляра субклассам.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;реализация&#34;&gt;Реализация&lt;/h3&gt;
+&lt;h3 id=&#34;реализация:2473779ea5617c0f0f76721eb7a89d68&#34;&gt;Реализация&lt;/h3&gt;
 
 &lt;p&gt;Суперкласс определяет стандартное поведение и делегирует детали создания субклассам, определенным пользователем. Для создания объектов используется наследование.&lt;/p&gt;
 
@@ -688,7 +799,7 @@ Chikago Style Cheese Pizza
 &lt;li&gt;Рассмотрите возможность создания внутреннего &amp;laquo;object pool&amp;raquo;, который позволит возвращать один и тот же экземпляр, вместо создания нового каждый раз&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;пример&#34;&gt;Пример&lt;/h3&gt;
+&lt;h3 id=&#34;пример:2473779ea5617c0f0f76721eb7a89d68&#34;&gt;Пример&lt;/h3&gt;
 
 &lt;p&gt;Фабричный метод похож на абстрактную фабрику, но в нем отсутствует акцент на семействах.&lt;/p&gt;
 
@@ -917,7 +1028,7 @@ Chikago style Deep Dish Cheese Pizza
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;реализация-паттерна-factory-method&#34;&gt;Реализация паттерна Factory Method:&lt;/h4&gt;
+&lt;h4 id=&#34;реализация-паттерна-factory-method:2473779ea5617c0f0f76721eb7a89d68&#34;&gt;Реализация паттерна Factory Method:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/FactoryMethod.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
@@ -1235,20 +1346,20 @@ myDarkRoast = Whip(beverage: myDarkRoast)
       <guid>http://rag0n.github.io/2015/12/01/swift-design-patterns-strategy/</guid>
       <description>
 
-&lt;h3 id=&#34;зачем-нужен:010736ab8fdfc1cfa693a6e5a7960263&#34;&gt;Зачем нужен?&lt;/h3&gt;
+&lt;h3 id=&#34;зачем-нужен&#34;&gt;Зачем нужен?&lt;/h3&gt;
 
 &lt;p&gt;Паттерн Strategy применяется для уменьшения связанности. В двух словах: программируйте на уровне интерфейсов, а не реализаций.&lt;/p&gt;
 
 &lt;p&gt;Соответствует open/closed принципу SOLID: изменение конкретных классов не влияет на клиента, т.к он зависит только от интерфейса.&lt;/p&gt;
 
-&lt;h3 id=&#34;определение:010736ab8fdfc1cfa693a6e5a7960263&#34;&gt;Определение&lt;/h3&gt;
+&lt;h3 id=&#34;определение&#34;&gt;Определение&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;определяет семейство алгоритмов(поведений), инкапсулирует и обеспечивает их взаимозаменяемость. Позволяет модифицировать алгоритмы независимо от их использования на стороне клиента.&lt;/li&gt;
 &lt;li&gt;инкапсулируем абстракцию в интерфейсе, скрываем реализацию в конкретных классах&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;реализация:010736ab8fdfc1cfa693a6e5a7960263&#34;&gt;Реализация&lt;/h3&gt;
+&lt;h3 id=&#34;реализация&#34;&gt;Реализация&lt;/h3&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Найдите алгоритм(поведение)&lt;/li&gt;
@@ -1257,7 +1368,7 @@ myDarkRoast = Whip(beverage: myDarkRoast)
 &lt;li&gt;Свяжите клиента алгоритма с интерфейсом&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;пример:010736ab8fdfc1cfa693a6e5a7960263&#34;&gt;Пример&lt;/h3&gt;
+&lt;h3 id=&#34;пример&#34;&gt;Пример&lt;/h3&gt;
 
 &lt;p&gt;Допустим у нас есть утки. Утки могут крякать по разному: кряканье, писк, а могут и вовсе не крякать. Алгоритмом в данном случае будет способ кряканья.&lt;/p&gt;
 
@@ -1322,7 +1433,7 @@ class Squeak: QuackBehavior {
 
 &lt;p&gt;Стоить заметить, что вместо создания конкретных классов можно применить протоколо-ориентированный подход, а точнее использование миксинов. Т.е создаем миксины(содержащие поведение), с помощью расширений протокола добавляем реализацию по умолчанию, далее конфигурируем конкретные классы с необходимым набором поведений. В результате дублирования кода не будет.&lt;/p&gt;
 
-&lt;h4 id=&#34;подробнее-про-протоколо-ориентированный-подход:010736ab8fdfc1cfa693a6e5a7960263&#34;&gt;Подробнее про протоколо-ориентированный подход:&lt;/h4&gt;
+&lt;h4 id=&#34;подробнее-про-протоколо-ориентированный-подход&#34;&gt;Подробнее про протоколо-ориентированный подход:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;http://swiftbook.ru/blog/introducing-protocol-oriented-programming-in-swift-2&#34;&gt;Знакомство с протоколо-ориентированным программированием в Swift 2&lt;/a&gt;&lt;/li&gt;
@@ -1331,7 +1442,7 @@ class Squeak: QuackBehavior {
 &lt;li&gt;&lt;a href=&#34;http://alisoftware.github.io/swift/protocol/2015/11/08/mixins-over-inheritance/#fnref2&#34;&gt;Mixins over Inheritance&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&#34;реализация-паттерна-strategy:010736ab8fdfc1cfa693a6e5a7960263&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
+&lt;h4 id=&#34;реализация-паттерна-strategy&#34;&gt;Реализация паттерна Strategy:&lt;/h4&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Rag0n/hfdp/blob/master/Strategy.playground/Contents.swift&#34;&gt;Мой playground с полной реализацией&lt;/a&gt;&lt;/li&gt;
