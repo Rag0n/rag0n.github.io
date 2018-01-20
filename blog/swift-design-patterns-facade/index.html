@@ -13,24 +13,24 @@
 <meta property="og:site_name" content="just another dev&#39;s notes" />
 <meta property="og:locale" content="nn_NO" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/" />
-<meta property="og:title" content="Паттерны" />
-<meta property="twitter:title" content="Паттерны">
+<meta property="og:url" content="http://rag0n.github.io/blog/swift-design-patterns-facade/" />
+<meta property="og:title" content="Swift Design Patterns: Facade" />
+<meta property="twitter:title" content="Swift Design Patterns: Facade">
 
     <meta property="og:image" content="http://rag0n.github.io/logo.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:image" content="http://rag0n.github.io/logo.png">
 
-<meta property="og:description" content="">
-<meta property="twitter:description" content="">
+<meta property="og:description" content="Описание и реализация паттерна проектирования Facade на языке Swift 2.">
+<meta property="twitter:description" content="Описание и реализация паттерна проектирования Facade на языке Swift 2.">
 
 <title>
 
 
-     just another dev&#39;s notes - Паттерны 
+     just another dev&#39;s notes - Swift Design Patterns: Facade 
 
 </title>
-<link rel="canonical" href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/">
+<link rel="canonical" href="http://rag0n.github.io/blog/swift-design-patterns-facade/">
 
 
 <style media="screen">
@@ -978,8 +978,6 @@ margin-left: -4%;
 
 
 
-  <link href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/index.xml" rel="alternate" type="application/rss+xml" title="just another dev&#39;s notes" />
-
 
 </head>
 
@@ -987,7 +985,7 @@ margin-left: -4%;
 <body>
 
 
-<div class="header header-home column">
+<div class="header column">
 
     <div class="container">
         <a href="http://rag0n.github.io/"><img class="logo" src="http://rag0n.github.io/logo.png" alt="logo" /></a>
@@ -1017,65 +1015,119 @@ margin-left: -4%;
 <div class="main column">
     <div class="container">
         <div class="content">
-            <div class="posts">
-                <div class="page-heading">Posts about Паттерны</div>
-                <ul>
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 1, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-strategy/"><span>Swift Design Patterns: Strategy</span></a>
-</li>
+            <div class="page-heading">
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 4, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-observer/"><span>Swift Design Patterns: Observer</span></a>
-</li>
+    Swift Design Patterns: Facade
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 15, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-decorator/"><span>Swift Design Patterns: Decorator</span></a>
-</li>
+</div>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 16, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-factory-method/"><span>Swift Design Patterns: Factory Method</span></a>
-</li>
+            <div class="markdown">
+                
+    
+    
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 17, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-abstract-factory/"><span>Swift Design Patterns: Abstract Factory</span></a>
-</li>
+<h3 id="зачем-нужен">Зачем нужен?</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-command/"><span>Swift Design Patterns: Command</span></a>
-</li>
+<p>Паттерн Facade применяется, когда какой-то части клиента требуется упрощенный интерфейс, управляющий полной функциональностью сложной подсистемы.</p>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-singleton/"><span>Swift Design Patterns: Singleton</span></a>
-</li>
+<h3 id="определение">Определение</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 21, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-adapter/"><span>Swift Design Patterns: Adapter</span></a>
-</li>
+<ul>
+<li>предоставляет унифицированный интерфейс к группе интерфейсов подсистемы. Фасад определяет высокоуровневый интерфейс, упрощающий работу с подсистемой</li>
+<li>обертывает(упаковывает) сложную подсистему в простой интерфейс</li>
+</ul>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 23, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-facade/"><span>Swift Design Patterns: Facade</span></a>
-</li>
+<h3 id="реализация">Реализация</h3>
 
-                    
-                </ul>
+<p>Паттерн инкапсулирует сложную подсистему внутри одного простого интерфейса. Упрощает начальное использование подсистемы(при этом остается гибкость, если нужна сложная настройка), уменьшает связанность. К реализации нужно подходить осторожно - фасад легко превратить в god-объект, который управляет всем и вся.</p>
+
+<p>Реализация похожа на паттерн адаптер, но задачи у них разные.</p>
+
+<ol>
+<li>Определите упрощенный интерфейс для подсистемы/компонента</li>
+<li>Спроектируйте класс-обертку(фасад), реализующий этот интерфейс</li>
+<li>Фасад управляет сложностью и взаимодействием компонентов с помощью делегации методов</li>
+<li>Клиент использует(связан) с фасадом</li>
+</ol>
+
+<h3 id="пример">Пример</h3>
+
+<p>Допустим у нас сложная система домашнего кинотеатра: проектор, усилитель, cd-плеер, экран, освещение..</p>
+
+<p>Чтобы все это включить надо потратить много времени. Вместо этого, определим упрощенный интерфейс: watchMovie() и endMovie.</p>
+
+<p>Реализуем класс-обертку(фасад):</p>
+
+<pre><code class="language-objectivec">// фасад
+class HomeTheaterFacade {
+    // компоненты подсистемы, которые будет использовать фасад
+    private let ampifier: Ampifier
+    private let tuner: Tuner
+    private let cdPlayer: CDPlayer
+    private let projector: Projector
+    private let theaterLights: TheaterLights
+    private let screen: Screen
+    private let popcornPopper: PopcornPopper
+    
+    init(ampifier: Ampifier, tuner: Tuner, cdPlayer: CDPlayer,
+        projector: Projector, theaterLights: TheaterLights,
+        screen: Screen, popper: PopcornPopper) {
+        self.ampifier = ampifier
+        self.tuner = tuner
+        self.cdPlayer = cdPlayer
+        self.projector = projector
+        self.theaterLights = theaterLights
+        self.screen = screen
+        self.popcornPopper = popper
+    }
+    
+    func watchMovie(movie: String) {
+    }
+    
+    func endMovie() {
+    }
+}
+</code></pre>
+
+<p>С помощью делегации определим взаимодействие компонентов</p>
+
+<pre><code class="language-objectivec">    func watchMovie(movie: String) {
+        print(&quot;Get ready to watch \(movie)&quot;)
+        popcornPopper.on()
+        popcornPopper.pop()
+        theaterLights.dim()
+        screen.down()
+        projector.on()
+        projector.wideScreenModeOn()
+        ampifier.on()
+        ampifier.setCD()
+        ampifier.setVolume()
+        cdPlayer.on()
+        cdPlayer.play()
+    }
+    
+    func endMovie() {
+        print(&quot;Shutting down&quot;)
+        popcornPopper.off()
+        screen.up()
+        projector.off()
+        ampifier.off()
+        cdPlayer.off()
+    }
+</code></pre>
+
+<p>Дальше клиент использует класс-фасад HomeTheaterFacade и наслаждается просмотром фильмов.</p>
+
+<p>В качестве другого примера - звонок в интернет магазин для заказа товара. Клиент взаимодействует с упрощенным интерфейсом(оператором), который заполняет заказ, форму оплаты, адрес доставки и тд.</p>
+
+<h4 id="реализация-паттерна-facade">Реализация паттерна Facade:</h4>
+
+<ul>
+<li><a href="https://github.com/Rag0n/hfdp/blob/master/Facade.playground/Contents.swift">Мой playground с полной реализацией</a></li>
+<li><a href="https://github.com/ochococo/Design-Patterns-In-Swift#-façade">Swift design patterns</a></li>
+</ul>
+
+
             </div>
         </div>
     </div>

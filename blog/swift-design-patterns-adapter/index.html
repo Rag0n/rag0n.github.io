@@ -13,24 +13,24 @@
 <meta property="og:site_name" content="just another dev&#39;s notes" />
 <meta property="og:locale" content="nn_NO" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/" />
-<meta property="og:title" content="Паттерны" />
-<meta property="twitter:title" content="Паттерны">
+<meta property="og:url" content="http://rag0n.github.io/blog/swift-design-patterns-adapter/" />
+<meta property="og:title" content="Swift Design Patterns: Adapter" />
+<meta property="twitter:title" content="Swift Design Patterns: Adapter">
 
     <meta property="og:image" content="http://rag0n.github.io/logo.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:image" content="http://rag0n.github.io/logo.png">
 
-<meta property="og:description" content="">
-<meta property="twitter:description" content="">
+<meta property="og:description" content="Описание и реализация паттерна проектирования Adapter на языке Swift 2.">
+<meta property="twitter:description" content="Описание и реализация паттерна проектирования Adapter на языке Swift 2.">
 
 <title>
 
 
-     just another dev&#39;s notes - Паттерны 
+     just another dev&#39;s notes - Swift Design Patterns: Adapter 
 
 </title>
-<link rel="canonical" href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/">
+<link rel="canonical" href="http://rag0n.github.io/blog/swift-design-patterns-adapter/">
 
 
 <style media="screen">
@@ -978,8 +978,6 @@ margin-left: -4%;
 
 
 
-  <link href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/index.xml" rel="alternate" type="application/rss+xml" title="just another dev&#39;s notes" />
-
 
 </head>
 
@@ -987,7 +985,7 @@ margin-left: -4%;
 <body>
 
 
-<div class="header header-home column">
+<div class="header column">
 
     <div class="container">
         <a href="http://rag0n.github.io/"><img class="logo" src="http://rag0n.github.io/logo.png" alt="logo" /></a>
@@ -1017,65 +1015,117 @@ margin-left: -4%;
 <div class="main column">
     <div class="container">
         <div class="content">
-            <div class="posts">
-                <div class="page-heading">Posts about Паттерны</div>
-                <ul>
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 1, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-strategy/"><span>Swift Design Patterns: Strategy</span></a>
-</li>
+            <div class="page-heading">
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 4, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-observer/"><span>Swift Design Patterns: Observer</span></a>
-</li>
+    Swift Design Patterns: Adapter
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 15, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-decorator/"><span>Swift Design Patterns: Decorator</span></a>
-</li>
+</div>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 16, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-factory-method/"><span>Swift Design Patterns: Factory Method</span></a>
-</li>
+            <div class="markdown">
+                
+    
+    
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 17, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-abstract-factory/"><span>Swift Design Patterns: Abstract Factory</span></a>
-</li>
+<h3 id="зачем-нужен">Зачем нужен?</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-command/"><span>Swift Design Patterns: Command</span></a>
-</li>
+<p>Паттерн Adapter применяется, когда у вас имеется готовый компонент, реализующий требуемую функциональность, но его API несовместимо с философией/архитектурой остальной системы.</p>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-singleton/"><span>Swift Design Patterns: Singleton</span></a>
-</li>
+<h3 id="определение">Определение</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 21, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-adapter/"><span>Swift Design Patterns: Adapter</span></a>
-</li>
+<ul>
+<li>преобразует интерфейс класса к другому интерфейсу, на который рассчитан клиент. Адаптер обеспечивает совместную работу классов, невозможную в обычных условиях из-за несовместимости интерфейсов.</li>
+<li>обертывает(упаковывает) существующий класс в новый интерфейс</li>
+<li>приводит в соответствие старый компонент к новой системе</li>
+</ul>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 23, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-facade/"><span>Swift Design Patterns: Facade</span></a>
-</li>
+<h3 id="реализация">Реализация</h3>
 
-                    
-                </ul>
+<p>Переиспользование кода очень часто является болезненным и труднодостижимым процессом. Одна из проблем - проектирование чего-то нового, при этом используя что-то старое. Но всегда есть какое-то несоответствие между новым и старым. Тут-то и пригодится связующий компонент, адаптер, который приведет в соответствие старый компонент к новой системе.</p>
+
+<p>Клиенты вызывают методы у объекта Адаптера, который перенаправляет вызовы к унаследованному компоненту. Адаптер может быть реализован с помощью наследования(адаптер классов) или с помощью композиции(агрегации). Паттерн Адаптер и адаптер в реальной мире - по сути одно и тоже.</p>
+
+<p>Реализация похожа на паттерн фасад, но задачи у них разные.</p>
+
+<ol>
+<li>Идентифицируйте клиента(компонент к которому надо приспосабливаться) и адаптируемый объект.</li>
+<li>Определите интерфейс, который требует клиент</li>
+<li>Спроектируйте класс-адаптер: он должен содержать адаптируемый объект(композиция) и делегировать интерфейс клиента адаптируемому объекту</li>
+</ol>
+
+<h3 id="пример">Пример</h3>
+
+<p>Допустим у нас есть утки. Но уток мало и мы хотим в качестве уток использовать еще и индейку. Индейка не может крякать, но может гоготать. Также она не может далеко летать.</p>
+
+<p>Идентифицируем клиента и его протокол(интерфейс):</p>
+
+<pre><code class="language-objectivec">protocol Duck {
+    func quack()
+    func fly()
+}
+
+// клиент
+class MallardDuck: Duck {
+    func quack() {
+        print(&quot;Quack-quack&quot;)
+    }
+    
+    func fly() {
+        print(&quot;I'm flying&quot;)
+    }
+}
+</code></pre>
+
+<p>Класс, который мы хотим адаптировать:</p>
+
+<pre><code class="language-objectivec">protocol Turkey {
+    func gobble()
+    func fly()
+}
+
+// адаптируемый интерфейс
+class WildTurkey: Turkey {
+    func gobble() {
+        print(&quot;Gobble-gobble&quot;)
+    }
+    
+    func fly() {
+        print(&quot;I'm flying but only on a short distances :(&quot;)
+    }
+}
+</code></pre>
+
+<p>Спроектируем адаптер</p>
+
+<pre><code class="language-objectivec">// адаптер
+class TurkeyAdapter: Duck {
+    private let turkey: Turkey
+    
+    init(turkey: Turkey) {
+        self.turkey = turkey
+    }
+    
+    func quack() {
+        turkey.gobble()
+    }
+    
+    func fly() {
+        for _ in 0..&lt;5 {
+            turkey.fly()
+        }
+    }
+}
+</code></pre>
+
+<p>Теперь мы можем спокойно использовать индейку и даже не подозревать, что это индейка.</p>
+
+<h4 id="реализация-паттерна-adapter">Реализация паттерна Adapter:</h4>
+
+<ul>
+<li><a href="https://github.com/Rag0n/hfdp/blob/master/Command.playground/Contents.swift">Мой playground с полной реализацией</a></li>
+<li><a href="https://github.com/ochococo/Design-Patterns-In-Swift#-adapter">Swift design patterns</a></li>
+</ul>
+
+
             </div>
         </div>
     </div>

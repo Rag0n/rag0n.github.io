@@ -13,24 +13,24 @@
 <meta property="og:site_name" content="just another dev&#39;s notes" />
 <meta property="og:locale" content="nn_NO" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/" />
-<meta property="og:title" content="Паттерны" />
-<meta property="twitter:title" content="Паттерны">
+<meta property="og:url" content="http://rag0n.github.io/blog/swift-design-patterns-strategy/" />
+<meta property="og:title" content="Swift Design Patterns: Strategy" />
+<meta property="twitter:title" content="Swift Design Patterns: Strategy">
 
     <meta property="og:image" content="http://rag0n.github.io/logo.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:image" content="http://rag0n.github.io/logo.png">
 
-<meta property="og:description" content="">
-<meta property="twitter:description" content="">
+<meta property="og:description" content="Описание и реализация паттерна проектирования Strategy на языке Swift 2.">
+<meta property="twitter:description" content="Описание и реализация паттерна проектирования Strategy на языке Swift 2.">
 
 <title>
 
 
-     just another dev&#39;s notes - Паттерны 
+     just another dev&#39;s notes - Swift Design Patterns: Strategy 
 
 </title>
-<link rel="canonical" href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/">
+<link rel="canonical" href="http://rag0n.github.io/blog/swift-design-patterns-strategy/">
 
 
 <style media="screen">
@@ -978,8 +978,6 @@ margin-left: -4%;
 
 
 
-  <link href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/index.xml" rel="alternate" type="application/rss+xml" title="just another dev&#39;s notes" />
-
 
 </head>
 
@@ -987,7 +985,7 @@ margin-left: -4%;
 <body>
 
 
-<div class="header header-home column">
+<div class="header column">
 
     <div class="container">
         <a href="http://rag0n.github.io/"><img class="logo" src="http://rag0n.github.io/logo.png" alt="logo" /></a>
@@ -1017,65 +1015,121 @@ margin-left: -4%;
 <div class="main column">
     <div class="container">
         <div class="content">
-            <div class="posts">
-                <div class="page-heading">Posts about Паттерны</div>
-                <ul>
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 1, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-strategy/"><span>Swift Design Patterns: Strategy</span></a>
-</li>
+            <div class="page-heading">
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 4, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-observer/"><span>Swift Design Patterns: Observer</span></a>
-</li>
+    Swift Design Patterns: Strategy
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 15, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-decorator/"><span>Swift Design Patterns: Decorator</span></a>
-</li>
+</div>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 16, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-factory-method/"><span>Swift Design Patterns: Factory Method</span></a>
-</li>
+            <div class="markdown">
+                
+    
+    
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 17, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-abstract-factory/"><span>Swift Design Patterns: Abstract Factory</span></a>
-</li>
+<h3 id="зачем-нужен">Зачем нужен?</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-command/"><span>Swift Design Patterns: Command</span></a>
-</li>
+<p>Паттерн Strategy применяется для уменьшения связанности. В двух словах: программируйте на уровне интерфейсов, а не реализаций.</p>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-singleton/"><span>Swift Design Patterns: Singleton</span></a>
-</li>
+<p>Соответствует open/closed принципу SOLID: изменение конкретных классов не влияет на клиента, т.к он зависит только от интерфейса.</p>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 21, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-adapter/"><span>Swift Design Patterns: Adapter</span></a>
-</li>
+<h3 id="определение">Определение</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 23, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-facade/"><span>Swift Design Patterns: Facade</span></a>
-</li>
+<ul>
+<li>определяет семейство алгоритмов(поведений), инкапсулирует и обеспечивает их взаимозаменяемость. Позволяет модифицировать алгоритмы независимо от их использования на стороне клиента.</li>
+<li>инкапсулируем абстракцию в интерфейсе, скрываем реализацию в конкретных классах</li>
+</ul>
 
-                    
-                </ul>
+<h3 id="реализация">Реализация</h3>
+
+<ol>
+<li>Найдите алгоритм(поведение)</li>
+<li>Определите сигнатуру в супертипе(интерфейсе/абстрактном классе/протоколе)</li>
+<li>Скройте реализацию(или реализации) в конкретном классе, который соответствует этому интерфейсу</li>
+<li>Свяжите клиента алгоритма с интерфейсом</li>
+</ol>
+
+<h3 id="пример">Пример</h3>
+
+<p>Допустим у нас есть утки. Утки могут крякать по разному: кряканье, писк, а могут и вовсе не крякать. Алгоритмом в данном случае будет способ кряканья.</p>
+
+<p>Теперь определим сигнатуру:</p>
+
+<pre><code class="language-objectivec">// в качестве супертипа - протокол(интерфейс)
+protocol QuackBehavior {
+    func quack()
+}
+</code></pre>
+
+<p>Скроем реализацию в конкретных классах:</p>
+
+<pre><code class="language-objectivec">// конкретные классы поведения, описываемые супертипом
+class Quack: QuackBehavior {
+    func quack() {
+        print(&quot;Я крякаю: quack-quack&quot;)
+    }
+}
+
+class QuackMute: QuackBehavior {
+    func quack() {
+        print(&quot;Я не крякаю :(&quot;)
+    }
+}
+
+class Squeak: QuackBehavior {
+    func quack() {
+        print(&quot;Я пищу: squeak-squeak&quot;)
+    }
+}
+</code></pre>
+
+<p>Свяжем клиента(в нашем случае - утку) с интерфейсом:</p>
+
+<pre><code class="language-objectivec">class Duck {
+    // Клиент Duck связан с абстракцией, а не с конкретными реализациями
+    private var quackBehavior: QuackBehavior
+    
+    required convenience init() {
+        self.init(quackBehavior: QuackMute())
+    }
+    
+    private init(quackBehavior: QuackBehavior) {
+        self.quackBehavior = quackBehavior
+    }
+        
+    func performQuack() {
+        // делегируем поведение
+        quackBehavior.quack()
+    }
+        
+    func setQuackBehavior(quackBehavior: QuackBehavior) {
+        self.quackBehavior = quackBehavior
+    }
+}
+</code></pre>
+
+<p>В данной реализации метод setQuackBehavior позволяет динамически изменять поведение.</p>
+
+<p>В качестве другого примера можно рассмотреть магазин, который осуществляет доставку разными способами: самолетом, самолетом-экспресс, морем. В данном случае алгоритм - способ доставки. Конкретные классы перечислены выше. Изменения методов доставки(например, квадрокоптером) никак не повлияют на клиента.</p>
+
+<p>Стоить заметить, что вместо создания конкретных классов можно применить протоколо-ориентированный подход, а точнее использование миксинов. Т.е создаем миксины(содержащие поведение), с помощью расширений протокола добавляем реализацию по умолчанию, далее конфигурируем конкретные классы с необходимым набором поведений. В результате дублирования кода не будет.</p>
+
+<h4 id="подробнее-про-протоколо-ориентированный-подход">Подробнее про протоколо-ориентированный подход:</h4>
+
+<ul>
+<li><a href="http://swiftbook.ru/blog/introducing-protocol-oriented-programming-in-swift-2">Знакомство с протоколо-ориентированным программированием в Swift 2</a></li>
+<li><a href="http://www.raywenderlich.com/109156/introducing-protocol-oriented-programming-in-swift-2">Introducing Protocol-Oriented Programming in Swift 2</a></li>
+<li><a href="http://code.tutsplus.com/tutorials/protocol-oriented-programming-in-swift-2--cms-24979">Protocol-Oriented Programming in Swift 2</a></li>
+<li><a href="http://alisoftware.github.io/swift/protocol/2015/11/08/mixins-over-inheritance/#fnref2">Mixins over Inheritance</a></li>
+</ul>
+
+<h4 id="реализация-паттерна-strategy">Реализация паттерна Strategy:</h4>
+
+<ul>
+<li><a href="https://github.com/Rag0n/hfdp/blob/master/Strategy.playground/Contents.swift">Мой playground с полной реализацией</a></li>
+<li><a href="https://github.com/ochococo/Design-Patterns-In-Swift#-strategy">Swift design patterns</a></li>
+</ul>
+
+
             </div>
         </div>
     </div>

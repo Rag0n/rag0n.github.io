@@ -13,24 +13,24 @@
 <meta property="og:site_name" content="just another dev&#39;s notes" />
 <meta property="og:locale" content="nn_NO" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/" />
-<meta property="og:title" content="Паттерны" />
-<meta property="twitter:title" content="Паттерны">
+<meta property="og:url" content="http://rag0n.github.io/blog/swift-design-patterns-singleton/" />
+<meta property="og:title" content="Swift Design Patterns: Singleton" />
+<meta property="twitter:title" content="Swift Design Patterns: Singleton">
 
     <meta property="og:image" content="http://rag0n.github.io/logo.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:image" content="http://rag0n.github.io/logo.png">
 
-<meta property="og:description" content="">
-<meta property="twitter:description" content="">
+<meta property="og:description" content="Описание и реализация паттерна проектирования Singleton на языке Swift 2.">
+<meta property="twitter:description" content="Описание и реализация паттерна проектирования Singleton на языке Swift 2.">
 
 <title>
 
 
-     just another dev&#39;s notes - Паттерны 
+     just another dev&#39;s notes - Swift Design Patterns: Singleton 
 
 </title>
-<link rel="canonical" href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/">
+<link rel="canonical" href="http://rag0n.github.io/blog/swift-design-patterns-singleton/">
 
 
 <style media="screen">
@@ -978,8 +978,6 @@ margin-left: -4%;
 
 
 
-  <link href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/index.xml" rel="alternate" type="application/rss+xml" title="just another dev&#39;s notes" />
-
 
 </head>
 
@@ -987,7 +985,7 @@ margin-left: -4%;
 <body>
 
 
-<div class="header header-home column">
+<div class="header column">
 
     <div class="container">
         <a href="http://rag0n.github.io/"><img class="logo" src="http://rag0n.github.io/logo.png" alt="logo" /></a>
@@ -1017,65 +1015,54 @@ margin-left: -4%;
 <div class="main column">
     <div class="container">
         <div class="content">
-            <div class="posts">
-                <div class="page-heading">Posts about Паттерны</div>
-                <ul>
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 1, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-strategy/"><span>Swift Design Patterns: Strategy</span></a>
-</li>
+            <div class="page-heading">
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 4, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-observer/"><span>Swift Design Patterns: Observer</span></a>
-</li>
+    Swift Design Patterns: Singleton
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 15, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-decorator/"><span>Swift Design Patterns: Decorator</span></a>
-</li>
+</div>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 16, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-factory-method/"><span>Swift Design Patterns: Factory Method</span></a>
-</li>
+            <div class="markdown">
+                
+    
+    
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 17, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-abstract-factory/"><span>Swift Design Patterns: Abstract Factory</span></a>
-</li>
+<h3 id="зачем-нужен">Зачем нужен?</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-command/"><span>Swift Design Patterns: Command</span></a>
-</li>
+<p>Паттерн Singleton применяется, если в приложении должен использоваться один и только один экземпляр класса. Кроме того, желательно иметь ленивую инициализацию и глобальный доступ.</p>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-singleton/"><span>Swift Design Patterns: Singleton</span></a>
-</li>
+<h3 id="определение">Определение</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 21, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-adapter/"><span>Swift Design Patterns: Adapter</span></a>
-</li>
+<ul>
+<li>гарантирует, что класс имеет только один экземпляр, и предоставляет глобальную точку доступа к этому экземпляру</li>
+</ul>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 23, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-facade/"><span>Swift Design Patterns: Facade</span></a>
-</li>
+<h3 id="реализация">Реализация</h3>
 
-                    
-                </ul>
+<ol>
+<li>Объявите статичный аттрибут-константу в классе</li>
+<li>Используйте приватный метод доступа у инициализатора</li>
+</ol>
+
+<h3 id="пример">Пример</h3>
+
+<p>Реализация на языке Swift получается в одну строчку. Связано это с тем, что для глобальных и статичных переменных структур, перечислений и классов используется ленивая инициализация. Ленивая инициализация запускается единожды и является потокобезопасной(атомарной), т.к используется <code>dispatch_once</code></p>
+
+<pre><code class="language-objectivec">class SomeClass {
+    static let sharedInstance = SomeClass()
+    private init() { }
+    
+    // другие методы
+}
+</code></pre>
+
+<h4 id="реализация-паттерна-singleton">Реализация паттерна Singleton:</h4>
+
+<ul>
+<li><a href="https://github.com/Rag0n/hfdp/blob/master/Singleton.playground/Contents.swift">Мой playground с полной реализацией</a></li>
+<li><a href="https://github.com/ochococo/Design-Patterns-In-Swift#-singleton">Swift design patterns</a></li>
+</ul>
+
+
             </div>
         </div>
     </div>

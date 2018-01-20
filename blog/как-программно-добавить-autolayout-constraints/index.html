@@ -13,24 +13,24 @@
 <meta property="og:site_name" content="just another dev&#39;s notes" />
 <meta property="og:locale" content="nn_NO" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/" />
-<meta property="og:title" content="Паттерны" />
-<meta property="twitter:title" content="Паттерны">
+<meta property="og:url" content="http://rag0n.github.io/blog/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/" />
+<meta property="og:title" content="Как программно добавить Autolayout constraints" />
+<meta property="twitter:title" content="Как программно добавить Autolayout constraints">
 
     <meta property="og:image" content="http://rag0n.github.io/logo.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:image" content="http://rag0n.github.io/logo.png">
 
-<meta property="og:description" content="">
-<meta property="twitter:description" content="">
+<meta property="og:description" content="iOS предоставляет большую гибкость в плане конструирования разметки интерфейса под различные девайсы. Например, если мы хотим, чтобы кастомная UIView со стороной 100 находилась в центре экрана, то мы можем сделать это пятью способами:">
+<meta property="twitter:description" content="iOS предоставляет большую гибкость в плане конструирования разметки интерфейса под различные девайсы. Например, если мы хотим, чтобы кастомная UIView со стороной 100 находилась в центре экрана, то мы можем сделать это пятью способами:">
 
 <title>
 
 
-     just another dev&#39;s notes - Паттерны 
+     just another dev&#39;s notes - Как программно добавить Autolayout constraints 
 
 </title>
-<link rel="canonical" href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/">
+<link rel="canonical" href="http://rag0n.github.io/blog/%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D0%BE-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-autolayout-constraints/">
 
 
 <style media="screen">
@@ -978,8 +978,6 @@ margin-left: -4%;
 
 
 
-  <link href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/index.xml" rel="alternate" type="application/rss+xml" title="just another dev&#39;s notes" />
-
 
 </head>
 
@@ -987,7 +985,7 @@ margin-left: -4%;
 <body>
 
 
-<div class="header header-home column">
+<div class="header column">
 
     <div class="container">
         <a href="http://rag0n.github.io/"><img class="logo" src="http://rag0n.github.io/logo.png" alt="logo" /></a>
@@ -1017,65 +1015,168 @@ margin-left: -4%;
 <div class="main column">
     <div class="container">
         <div class="content">
-            <div class="posts">
-                <div class="page-heading">Posts about Паттерны</div>
-                <ul>
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 1, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-strategy/"><span>Swift Design Patterns: Strategy</span></a>
-</li>
+            <div class="page-heading">
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 4, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-observer/"><span>Swift Design Patterns: Observer</span></a>
-</li>
+    Как программно добавить Autolayout constraints
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 15, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-decorator/"><span>Swift Design Patterns: Decorator</span></a>
-</li>
+</div>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 16, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-factory-method/"><span>Swift Design Patterns: Factory Method</span></a>
-</li>
+            <div class="markdown">
+                
+    
+    
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 17, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-abstract-factory/"><span>Swift Design Patterns: Abstract Factory</span></a>
-</li>
+<h3 id="используя-классический-способ">Используя классический способ</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-command/"><span>Swift Design Patterns: Command</span></a>
-</li>
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-singleton/"><span>Swift Design Patterns: Singleton</span></a>
-</li>
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    newView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(newView)
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 21, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-adapter/"><span>Swift Design Patterns: Adapter</span></a>
-</li>
+    let horizontalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
+    view.addConstraint(horizontalConstraint)
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 23, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-facade/"><span>Swift Design Patterns: Facade</span></a>
-</li>
+    let verticalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
+    view.addConstraint(verticalConstraint)
 
-                    
-                </ul>
+    let widthConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
+    newView.addConstraint(widthConstraint)
+    // view.addConstraint(widthConstraint) // работает аналогично
+
+    let heightConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
+    newView.addConstraint(heightConstraint)
+    // view.addConstraint(heightConstraint) // работает аналогично
+}
+</code></pre>
+
+<h3 id="используя-смешанный-способ-классический-visual-format-language">Используя смешанный способ(Классический + Visual Format Language)</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    newView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(newView)
+
+    let horizontalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
+    view.addConstraint(horizontalConstraint)
+
+    let verticalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
+    view.addConstraint(verticalConstraint)
+
+    let views = [&quot;newView&quot;: newView]
+
+    let widthConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&quot;H:[newView(100)]&quot;, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+    newView.addConstraints(widthConstraints)
+    // view.addConstraints(widthConstraints) // работает аналогично
+
+    let heightConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&quot;V:[newView(100)]&quot;, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+    newView.addConstraints(heightConstraints)
+    // view.addConstraints(heightConstraints) // работает аналогично
+
+}
+</code></pre>
+
+<h3 id="используя-только-visual-format-language">Используя только Visual Format Language</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    newView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(newView)
+
+    let views = [&quot;view&quot;: view, &quot;newView&quot;: newView]
+    let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&quot;H:[view]-(&lt;=0)-[newView(100)]&quot;, options: NSLayoutFormatOptions.AlignAllCenterY, metrics: nil, views: views)
+    view.addConstraints(horizontalConstraints)
+    let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(&quot;V:[view]-(&lt;=0)-[newView(100)]&quot;, options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
+    view.addConstraints(verticalConstraints)
+}
+</code></pre>
+
+<h3 id="используя-autoresizing-mask">Используя Autoresizing mask</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0))
+    newView.backgroundColor = UIColor.redColor()
+
+    newView.translatesAutoresizingMaskIntoConstraints = true
+
+    newView.center = CGPointMake(view.bounds.midX, view.bounds.midY)
+    newView.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin, UIViewAutoresizing.FlexibleTopMargin, UIViewAutoresizing.FlexibleBottomMargin]
+
+    view.addSubview(newView)
+}
+</code></pre>
+
+<h3 id="используя-anchor-только-для-ios-9">Используя Anchor(только для iOS 9)</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    newView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(newView)
+
+    let horizontalConstraint = newView.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor)
+    let vertivalConstraint = newView.centerYAnchor.constraintEqualToAnchor(view.centerYAnchor)
+    let widthConstraint = newView.widthAnchor.constraintEqualToAnchor(nil, constant: 100)
+    let heightConstraint = newView.heightAnchor.constraintEqualToAnchor(nil, constant: 100)
+    NSLayoutConstraint.activateConstraints([horizontalConstraint, vertivalConstraint, widthConstraint, heightConstraint])
+}
+</code></pre>
+
+<h3 id="используя-snapkit-сторонее-по">Используя SnapKit(сторонее ПО)</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    view.addSubview(newView)
+    
+    newView.snp_makeConstraints { (make) -&gt; Void in
+        make.centerX.equalTo(view)
+        make.centerY.equalTo(view)
+        make.width.equalTo(100)
+        make.height.equalTo(100)
+    }
+}
+</code></pre>
+
+<p>В этом случае не требуется ни newView.translatesAutoresizingMaskIntoConstraints = false, ни активация constraints.</p>
+
+<h3 id="используя-cartography-стороннее-по">Используя Cartography(стороннее ПО)</h3>
+
+<pre><code class="language-objectivec">override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    let newView = UIView()
+    newView.backgroundColor = UIColor.redColor()
+    view.addSubview(newView)
+    
+    constrain(newView, view) { (newView, view) -&gt; () in
+        newView.centerX == view.centerX
+        newView.centerY == view.centerY
+        newView.width == 100
+        newView.height == 100
+    }
+}
+</code></pre>
+
+<p>Данная библиотека использует декларативный стиль программирования, т.е она описывает каков объект, а не как его отображать.</p>
+
+<p><strong>P.S</strong> Представленный код работает для swift 2.</p>
+
+
             </div>
         </div>
     </div>

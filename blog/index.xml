@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Swift on just another dev&#39;s notes</title>
-    <link>http://rag0n.github.io/tags/swift/</link>
-    <description>Recent content in Swift on just another dev&#39;s notes</description>
+    <title>Blog on just another dev&#39;s notes</title>
+    <link>http://rag0n.github.io/blog/</link>
+    <description>Recent content in Blog on just another dev&#39;s notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <copyright>Copyright © 2015 Alexander Guschin</copyright>
     <lastBuildDate>Wed, 23 Dec 2015 11:30:57 +0300</lastBuildDate>
     
-	<atom:link href="http://rag0n.github.io/tags/swift/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://rag0n.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>

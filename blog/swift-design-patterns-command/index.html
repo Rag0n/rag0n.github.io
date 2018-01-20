@@ -13,24 +13,24 @@
 <meta property="og:site_name" content="just another dev&#39;s notes" />
 <meta property="og:locale" content="nn_NO" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/" />
-<meta property="og:title" content="Паттерны" />
-<meta property="twitter:title" content="Паттерны">
+<meta property="og:url" content="http://rag0n.github.io/blog/swift-design-patterns-command/" />
+<meta property="og:title" content="Swift Design Patterns: Command" />
+<meta property="twitter:title" content="Swift Design Patterns: Command">
 
     <meta property="og:image" content="http://rag0n.github.io/logo.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:image" content="http://rag0n.github.io/logo.png">
 
-<meta property="og:description" content="">
-<meta property="twitter:description" content="">
+<meta property="og:description" content="Описание и реализация паттерна проектирования Command на языке Swift 2.">
+<meta property="twitter:description" content="Описание и реализация паттерна проектирования Command на языке Swift 2.">
 
 <title>
 
 
-     just another dev&#39;s notes - Паттерны 
+     just another dev&#39;s notes - Swift Design Patterns: Command 
 
 </title>
-<link rel="canonical" href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/">
+<link rel="canonical" href="http://rag0n.github.io/blog/swift-design-patterns-command/">
 
 
 <style media="screen">
@@ -978,8 +978,6 @@ margin-left: -4%;
 
 
 
-  <link href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/index.xml" rel="alternate" type="application/rss+xml" title="just another dev&#39;s notes" />
-
 
 </head>
 
@@ -987,7 +985,7 @@ margin-left: -4%;
 <body>
 
 
-<div class="header header-home column">
+<div class="header column">
 
     <div class="container">
         <a href="http://rag0n.github.io/"><img class="logo" src="http://rag0n.github.io/logo.png" alt="logo" /></a>
@@ -1017,65 +1015,190 @@ margin-left: -4%;
 <div class="main column">
     <div class="container">
         <div class="content">
-            <div class="posts">
-                <div class="page-heading">Posts about Паттерны</div>
-                <ul>
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 1, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-strategy/"><span>Swift Design Patterns: Strategy</span></a>
-</li>
+            <div class="page-heading">
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 4, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-observer/"><span>Swift Design Patterns: Observer</span></a>
-</li>
+    Swift Design Patterns: Command
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 15, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-decorator/"><span>Swift Design Patterns: Decorator</span></a>
-</li>
+</div>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 16, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-factory-method/"><span>Swift Design Patterns: Factory Method</span></a>
-</li>
+            <div class="markdown">
+                
+    
+    
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 17, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-abstract-factory/"><span>Swift Design Patterns: Abstract Factory</span></a>
-</li>
+<h3 id="зачем-нужен">Зачем нужен?</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-command/"><span>Swift Design Patterns: Command</span></a>
-</li>
+<p>Паттерн Command применяется, когда необходимо выполнять команды(операции, запросы), без знания того, какие функции должны вызываться и даже того, кто должен выполнять эти функции. Паттерн инкапсулирует вычислительные блоки(получателя + набор операций). Его можно применять в планировщиках, различных пулах, очередях задач.</p>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-singleton/"><span>Swift Design Patterns: Singleton</span></a>
-</li>
+<p>Обеспечивает соблюдение принципа инверсии зависимостей. Уменьшает связанность классов.</p>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 21, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-adapter/"><span>Swift Design Patterns: Adapter</span></a>
-</li>
+<h3 id="определение">Определение</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 23, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-facade/"><span>Swift Design Patterns: Facade</span></a>
-</li>
+<ul>
+<li>инкапсулирует запрос в виде объекта, делая возможной параметризацию клиентских объектов с различными запросами, организацию очереди или регистрацию запросов, а также поддержку отмены операций</li>
+</ul>
 
-                    
-                </ul>
+<h3 id="реализация">Реализация</h3>
+
+<p>Command разъединяет(decouple) объект, который вызывает операцию от объекта, который знает как эту операцию выполнить. Для этого создается интерфейс Command, который связывает получателя с действием. Интерфейс содержит абстрактный метод <code>execute</code>, который вызывает действия у получателя. Клиенты Command рассматривают получателя как черную коробку: когда необходимо, клиент вызывает метод <code>execute</code> и больше его ничего не волнует.</p>
+
+<p>Клиент, создающий команду и клиент, выполняющий команду - разные клиенты. Данное разделение обеспечивает гибкость во времени выполнения и последовательности команд. Инкапсуляция команд в виде объекто делает возможным их передачу/хранение/загрузку и тд.</p>
+
+<ol>
+<li>Определите интерфейс команды с сигнатурой метода такой как <code>execute()</code></li>
+<li>Создайте несколько конкретных классов комманд, содержащих объект получателя, методы, которые нужно вызвать и аргументы, которые нужно передать получателю.</li>
+<li>Инициализируйте объекты команд для каждого отложенного выполнения</li>
+<li>Передайте объекты команд от создателя(отправителя, sender) к инициатору(invoker)</li>
+<li>Инициатор определяет, когда выполнять команды</li>
+</ol>
+
+<h3 id="пример">Пример</h3>
+
+<p>Допустим у нас есть пульт управления умным домом. В нем есть возможность задать несколько устройств, и для каждого устройства есть кнопка on и off.</p>
+
+<p>Определим интерфейс команды</p>
+
+<pre><code class="language-objectivec">// абстрактная команда, используем для инкапсуляции классов устройств(устройство + операции)
+// в результате при добавлении новых классов устройств
+// не нужно будет изменять управляющий класс пульта(remoteControl)
+protocol Command {
+    func execute()
+}
+</code></pre>
+
+<p>Создадим несколько конкретных классов команд</p>
+
+<pre><code class="language-objectivec">// классы конкретных комманд, инкапсулируют запросы к конкретным устройствам
+class NoCommand: Command {
+    // объект-получатель
+    func execute() {
+        print(&quot;No command&quot;)
+    }
+}
+
+class LightOnCommand: Command {
+    // объект-получатель
+    private let light: Light
+    
+    init(light: Light) {
+        self.light = light
+    }
+    
+    func execute() {
+        // методы, которые нужно вызвать, без аргументов
+        light.on()
+    }
+}
+
+class LightOffCommand: Command {
+    // объект-получатель
+    private let light: Light
+    
+    init(light: Light) {
+        self.light = light
+    }
+    
+    func execute() {
+        // методы, которые нужно вызвать, без аргументов
+        light.off()
+    }
+}
+
+class StereoOnWithCDCommand: Command {
+    // объект-получатель
+    private let stereo: Stereo
+    
+    init(stereo: Stereo) {
+        self.stereo = stereo
+    }
+    
+    func execute() {
+        // методы, которые нужно вызвать, без аргументов
+        stereo.on()
+        stereo.setCD()
+        stereo.setVolume()
+    }
+}
+
+class GarageOpenCommand: Command {
+    // объект-получатель
+    private let garage: Garage
+    
+    init(garageDoor: Garage) {
+        self.garage = garageDoor
+    }
+    
+    func execute() {
+        // методы, которые нужно вызвать, без аргументов
+        garage.openDoor()
+    }
+}
+
+class GarageCloseCommand: Command {
+    // объект-получатель
+    private let garage: Garage
+    
+    init(garageDoor: Garage) {
+        self.garage = garageDoor
+    }
+    
+    func execute() {
+        // методы, которые нужно вызвать, без аргументов
+        garage.closeDoor()
+    }
+}
+</code></pre>
+
+<p>Инициализируем объекты команд</p>
+
+<pre><code class="language-objectivec">let livingRoomLight = Light(site: &quot;Living Room&quot;)
+let livingRoomLightOn = LightOnCommand(light: livingRoomLight)
+let livingRoomLightOff = LightOffCommand(light: livingRoomLight)
+
+let kitchenLight = Light(site: &quot;Kitchen&quot;)
+let kitchenLightOn = LightOnCommand(light: kitchenLight)
+let kitchenLightOff = LightOffCommand(light: kitchenLight)
+
+let garage = Garage()
+let garageOpen = GarageOpenCommand(garageDoor: garage)
+let garageClose = GarageCloseCommand(garageDoor: garage)
+</code></pre>
+
+<p>Передадим объекты команд от создателя(creator) к инициатору(invoker)</p>
+
+<pre><code class="language-objectivec">let remote = RemoteControl()
+remote.setCommand(0, onCommand: livingRoomLightOn, offCommand: livingRoomLightOff)
+remote.setCommand(1, onCommand: kitchenLightOn, offCommand: kitchenLightOff)
+remote.setCommand(2, onCommand: garageOpen, offCommand: garageClose)
+
+</code></pre>
+
+<p>В нашем случае команды выполняются по нажатию кнопок на пульте управления</p>
+
+<pre><code class="language-objectivec">remote.onButtonPressed(0)
+remote.offButtonPressed(0)
+remote.undoButtonPressed()
+
+remote.onButtonPressed(1)
+remote.offButtonPressed(1)
+
+remote.onButtonPressed(2)
+remote.offButtonPressed(2)
+
+remote.onButtonPressed(3)
+remote.offButtonPressed(3)
+</code></pre>
+
+<p>В качестве другого примера можно рассмотреть ресторан. Командой в данном случае будет заказ. Посетитель - клиент-создатель(client, creator), официантка - инициатор, повар - получатель.</p>
+
+<h4 id="реализация-паттерна-command">Реализация паттерна Command:</h4>
+
+<ul>
+<li><a href="https://github.com/Rag0n/hfdp/blob/master/Command.playground/Contents.swift">Мой playground с полной реализацией</a></li>
+<li><a href="https://github.com/ochococo/Design-Patterns-In-Swift#-command">Swift design patterns</a></li>
+</ul>
+
+
             </div>
         </div>
     </div>

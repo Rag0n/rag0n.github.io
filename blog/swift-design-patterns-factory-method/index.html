@@ -13,24 +13,24 @@
 <meta property="og:site_name" content="just another dev&#39;s notes" />
 <meta property="og:locale" content="nn_NO" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/" />
-<meta property="og:title" content="Паттерны" />
-<meta property="twitter:title" content="Паттерны">
+<meta property="og:url" content="http://rag0n.github.io/blog/swift-design-patterns-factory-method/" />
+<meta property="og:title" content="Swift Design Patterns: Factory Method" />
+<meta property="twitter:title" content="Swift Design Patterns: Factory Method">
 
     <meta property="og:image" content="http://rag0n.github.io/logo.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:image" content="http://rag0n.github.io/logo.png">
 
-<meta property="og:description" content="">
-<meta property="twitter:description" content="">
+<meta property="og:description" content="Описание и реализация паттерна проектирования Factory Method на языке Swift 2.">
+<meta property="twitter:description" content="Описание и реализация паттерна проектирования Factory Method на языке Swift 2.">
 
 <title>
 
 
-     just another dev&#39;s notes - Паттерны 
+     just another dev&#39;s notes - Swift Design Patterns: Factory Method 
 
 </title>
-<link rel="canonical" href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/">
+<link rel="canonical" href="http://rag0n.github.io/blog/swift-design-patterns-factory-method/">
 
 
 <style media="screen">
@@ -978,8 +978,6 @@ margin-left: -4%;
 
 
 
-  <link href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/index.xml" rel="alternate" type="application/rss+xml" title="just another dev&#39;s notes" />
-
 
 </head>
 
@@ -987,7 +985,7 @@ margin-left: -4%;
 <body>
 
 
-<div class="header header-home column">
+<div class="header column">
 
     <div class="container">
         <a href="http://rag0n.github.io/"><img class="logo" src="http://rag0n.github.io/logo.png" alt="logo" /></a>
@@ -1017,65 +1015,280 @@ margin-left: -4%;
 <div class="main column">
     <div class="container">
         <div class="content">
-            <div class="posts">
-                <div class="page-heading">Posts about Паттерны</div>
-                <ul>
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 1, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-strategy/"><span>Swift Design Patterns: Strategy</span></a>
-</li>
+            <div class="page-heading">
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 4, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-observer/"><span>Swift Design Patterns: Observer</span></a>
-</li>
+    Swift Design Patterns: Factory Method
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 15, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-decorator/"><span>Swift Design Patterns: Decorator</span></a>
-</li>
+</div>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 16, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-factory-method/"><span>Swift Design Patterns: Factory Method</span></a>
-</li>
+            <div class="markdown">
+                
+    
+    
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 17, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-abstract-factory/"><span>Swift Design Patterns: Abstract Factory</span></a>
-</li>
+<h3 id="зачем-нужен">Зачем нужен?</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-command/"><span>Swift Design Patterns: Command</span></a>
-</li>
+<p>Паттерн Factory method применяется когда создатель(фреймворк) должен стандартизировать архитектурную модель для клиентов и одновременно позволить клиентам определять свои объекты предметной области(domain objets).</p>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-singleton/"><span>Swift Design Patterns: Singleton</span></a>
-</li>
+<p>Обеспечивает соблюдение принципа инверсии зависимостей. Уменьшает связанность классов.</p>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 21, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-adapter/"><span>Swift Design Patterns: Adapter</span></a>
-</li>
+<h3 id="определение">Определение</h3>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 23, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-facade/"><span>Swift Design Patterns: Facade</span></a>
-</li>
+<ul>
+<li>определяет интерфейс создания объекта, но позволяет субклассам выбрать класс создаваемого экземпляра. Таким образом, Фабричный метод делегирует операцию создания экземпляра субклассам.</li>
+</ul>
 
-                    
-                </ul>
+<h3 id="реализация">Реализация</h3>
+
+<p>Суперкласс определяет стандартное поведение и делегирует детали создания субклассам, определенным пользователем. Для создания объектов используется наследование.</p>
+
+<p>Существует несколько реализаций:
+статичный метод(вместо метода инициализации) или
+абстрактный метод(реализация определяется подклассами)</p>
+
+<ol>
+<li>Спроектируйте аргументы фабричного метода(по каким харектиристикам фабричный метод будет выбирать конкретный продукт)</li>
+<li>Объявите констуктуры приватными или защищенными</li>
+<li>Рассмотрите возможность создания внутреннего &ldquo;object pool&rdquo;, который позволит возвращать один и тот же экземпляр, вместо создания нового каждый раз</li>
+</ol>
+
+<h3 id="пример">Пример</h3>
+
+<p>Фабричный метод похож на абстрактную фабрику, но в нем отсутствует акцент на семействах.</p>
+
+<p>Допустим у нас есть сеть пиццерий по всей стране. В Нью-Йорке жители любят тонкий слой теста, немного специй. В Чикаго - толстый слой теста, много сыра.</p>
+
+<p>Мы хотим, чтобы процесс приготовления был стандартизирован и одинаков во всех пиццерий, но при этом учитывались особенности местной кухни.</p>
+
+<p>Для этого объявим общий интерфейс для пиццерий, при этом делегируем реализацию фабричного метода субклассам:</p>
+
+<pre><code class="language-objectivec">// абстрактный класс создатель
+protocol PizzaStore {
+    func orderPizza(type: String) -&gt; Pizza
+    // фабричный метод
+    func createPizza(type: String) -&gt; Pizza
+}
+
+extension PizzaStore {
+    func orderPizza(type: String) -&gt; Pizza {
+        // для создание пиццы используем фабричный метод
+        let pizza = createPizza(type)
+        
+        pizza.prepare()
+        pizza.bake()
+        pizza.cut()
+        pizza.box()
+        
+        return pizza
+    }
+}
+</code></pre>
+
+<p>Объявим конкретные пиццерии, учитывающие местные обычаи - для этого реализуем фабричный метод</p>
+
+<pre><code class="language-objectivec">// конкретный класс-создатель
+class NYPizzaStore: PizzaStore {
+    
+    func createPizza(type: String) -&gt; Pizza {
+        switch type {
+            case &quot;cheese&quot;:
+                return NYStyleCheesePizza()
+            case &quot;veggie&quot;:
+                return NYStyleVeggiePizza()
+            case &quot;clam&quot;:
+                return NYStyleClamPizza()
+            case &quot;pepperoni&quot;:
+                return NYStylePepperoniPizza()
+        default:
+            return NYStyleCheesePizza()
+        }
+    }
+}
+
+
+// конкретный класс-создатель
+class ChikagoPizzaStore: PizzaStore {
+    
+    func createPizza(type: String) -&gt; Pizza {
+        switch type {
+        case &quot;cheese&quot;:
+            return ChikagoStyleCheesePizza()
+        case &quot;veggie&quot;:
+            return ChikagoStyleVeggiePizza()
+        case &quot;clam&quot;:
+            return ChikagoStyleClamPizza()
+        case &quot;pepperoni&quot;:
+            return ChikagoStylePepperoniPizza()
+        default:
+            return ChikagoStyleCheesePizza()
+        }
+    }
+}
+</code></pre>
+
+<p>Объявим абстрактный продукт и стандартизируем процесс приготовления</p>
+
+<pre><code class="language-objectivec">// абстрактный продукт
+protocol Pizza {
+    var name: String { get }
+    var dough: String { get }
+    var sauce: String { get }
+    var toppings: [String] { get }
+    
+    func prepare()
+    
+    func bake()
+    
+    func cut()
+    
+    func box()
+}
+
+// добавляем реализацию по умолчанию
+extension Pizza {
+    
+    func prepare() {
+        print(&quot;Preparing \(name)&quot;)
+        print(&quot;Tossing dough...&quot;)
+        print(&quot;Adding sauce&quot;)
+        print(&quot;Adding toppings \(toppings)&quot;)
+    }
+    
+    func bake() {
+        print(&quot;Bake for 25 minutes at 350&quot;)
+    }
+    
+    func cut() {
+        print(&quot;Cutting the pizza into diagonal slices&quot;)
+    }
+    
+    func box() {
+        print(&quot;Place pizza in the official PizzaStore box&quot;)
+    }
+}
+</code></pre>
+
+<p>Создадим конкретные продукты</p>
+
+<pre><code class="language-objectivec">// конкретные продукты
+class NYStyleCheesePizza: Pizza {
+    let name = &quot;Ny style Sauce and Cheese Pizza&quot;
+    let dough = &quot;Thin Crust Dough&quot;
+    let sauce = &quot;Marinara Sauce&quot;
+    let toppings = [&quot;Grated Reggiano Cheese&quot;]
+}
+
+class NYStyleVeggiePizza: Pizza {
+    let name = &quot;Ny style Sauce and Veggie Pizza&quot;
+    let dough = &quot;Thin Crust Dough&quot;
+    let sauce = &quot;Marinara Sauce&quot;
+    let toppings = [&quot;Veggie&quot;]
+}
+
+class NYStyleClamPizza: Pizza {
+    let name = &quot;Ny style Sauce and Clam Pizza&quot;
+    let dough = &quot;Thin Crust Dough&quot;
+    let sauce = &quot;Marinara Sauce&quot;
+    let toppings = [&quot;Clam&quot;]
+}
+
+class NYStylePepperoniPizza: Pizza {
+    let name = &quot;Ny style Sauce and Pepperoni Pizza&quot;
+    let dough = &quot;Thin Crust Dough&quot;
+    let sauce = &quot;Marinara Sauce&quot;
+    let toppings = [&quot;Pepperoni&quot;]
+}
+
+class ChikagoStyleCheesePizza: Pizza {
+    let name = &quot;Chikago style Deep Dish Cheese Pizza&quot;
+    let dough = &quot;Extra Thick Crust Dough&quot;
+    let sauce = &quot;Plum Tomato Sauce&quot;
+    let toppings = [&quot;Shredded Mozarella Cheese&quot;]
+    
+    func cut() {
+        print(&quot;Cutting pizza into square slices&quot;)
+    }
+}
+
+class ChikagoStyleVeggiePizza: Pizza {
+    let name = &quot;Chikago style Deep Dish Veggie Pizza&quot;
+    let dough = &quot;Extra Thick Crust Dough&quot;
+    let sauce = &quot;Plum Tomato Sauce&quot;
+    let toppings = [&quot;Veggie&quot;]
+    
+    func cut() {
+        print(&quot;Cutting pizza into square slices&quot;)
+    }
+}
+
+class ChikagoStyleClamPizza: Pizza {
+    let name = &quot;Chikago style Deep Dish Clam Pizza&quot;
+    let dough = &quot;Extra Thick Crust Dough&quot;
+    let sauce = &quot;Plum Tomato Sauce&quot;
+    let toppings = [&quot;Clam&quot;]
+    
+    func cut() {
+        print(&quot;Cutting pizza into square slices&quot;)
+    }
+}
+
+class ChikagoStylePepperoniPizza: Pizza {
+    let name = &quot;Chikago style Deep Dish Pepperoni Pizza&quot;
+    let dough = &quot;Extra Thick Crust Dough&quot;
+    let sauce = &quot;Plum Tomato Sauce&quot;
+    let toppings = [&quot;Pepperoni&quot;]
+    
+    func cut() {
+        print(&quot;Cutting pizza into square slices&quot;)
+    }
+}
+}
+</code></pre>
+
+<p>Посетим пиццерию в Нью-Йорке и закажем сырную пиццу</p>
+
+<pre><code class="language-objectivec">let nyStore = NYPizzaStore()
+let NYPizza = nyStore.orderPizza(&quot;cheese&quot;)
+print(NYPizza.name)
+/*
+Preparing Ny style Sauce and Cheese Pizza
+Tossing dough...
+Adding sauce
+Adding toppings [&quot;Grated Reggiano Cheese&quot;]
+Bake for 25 minutes at 350
+Cutting the pizza into diagonal slices
+Place pizza in the official PizzaStore box
+*/
+}
+</code></pre>
+
+<p>Посетим пиццерию в Чикаго и аналогично закажем сырную пиццу</p>
+
+<pre><code class="language-objectivec">let chikagoStore = ChikagoPizzaStore()
+let ChikagoPizza = chikagoStore.orderPizza(&quot;cheese&quot;)
+print(ChikagoPizza.name)
+/*
+Preparing Chikago style Deep Dish Cheese Pizza
+Tossing dough...
+Adding sauce
+Adding toppings [&quot;Shredded Mozarella Cheese&quot;]
+Bake for 25 minutes at 350
+Cutting pizza into square slices
+Place pizza in the official PizzaStore box
+Ny style Sauce and Cheese Pizza
+Chikago style Deep Dish Cheese Pizza
+*/
+}
+</code></pre>
+
+<h4 id="реализация-паттерна-factory-method">Реализация паттерна Factory Method:</h4>
+
+<ul>
+<li><a href="https://github.com/Rag0n/hfdp/blob/master/FactoryMethod.playground/Contents.swift">Мой playground с полной реализацией</a></li>
+<li><a href="https://github.com/ochococo/Design-Patterns-In-Swift#-factory-method">Swift design patterns</a></li>
+</ul>
+
+
             </div>
         </div>
     </div>

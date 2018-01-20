@@ -13,24 +13,24 @@
 <meta property="og:site_name" content="just another dev&#39;s notes" />
 <meta property="og:locale" content="nn_NO" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/" />
-<meta property="og:title" content="Паттерны" />
-<meta property="twitter:title" content="Паттерны">
+<meta property="og:url" content="http://rag0n.github.io/blog/%D0%BB%D1%83%D1%87%D1%88%D0%B8%D0%B5-%D0%BF%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%BA%D0%B8-swift-%D1%87%D0%B0%D1%81%D1%82%D1%8C-1/" />
+<meta property="og:title" content="Лучшие практики swift (часть 1)" />
+<meta property="twitter:title" content="Лучшие практики swift (часть 1)">
 
     <meta property="og:image" content="http://rag0n.github.io/logo.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:image" content="http://rag0n.github.io/logo.png">
 
-<meta property="og:description" content="">
-<meta property="twitter:description" content="">
+<meta property="og:description" content="Перевод статьи Sam Dods о том, какие практики он использует при работе с языком Swift 2.">
+<meta property="twitter:description" content="Перевод статьи Sam Dods о том, какие практики он использует при работе с языком Swift 2.">
 
 <title>
 
 
-     just another dev&#39;s notes - Паттерны 
+     just another dev&#39;s notes - Лучшие практики swift (часть 1) 
 
 </title>
-<link rel="canonical" href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/">
+<link rel="canonical" href="http://rag0n.github.io/blog/%D0%BB%D1%83%D1%87%D1%88%D0%B8%D0%B5-%D0%BF%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%BA%D0%B8-swift-%D1%87%D0%B0%D1%81%D1%82%D1%8C-1/">
 
 
 <style media="screen">
@@ -978,8 +978,6 @@ margin-left: -4%;
 
 
 
-  <link href="http://rag0n.github.io/tags/%D0%BF%D0%B0%D1%82%D1%82%D0%B5%D1%80%D0%BD%D1%8B/index.xml" rel="alternate" type="application/rss+xml" title="just another dev&#39;s notes" />
-
 
 </head>
 
@@ -987,7 +985,7 @@ margin-left: -4%;
 <body>
 
 
-<div class="header header-home column">
+<div class="header column">
 
     <div class="container">
         <a href="http://rag0n.github.io/"><img class="logo" src="http://rag0n.github.io/logo.png" alt="logo" /></a>
@@ -1017,65 +1015,205 @@ margin-left: -4%;
 <div class="main column">
     <div class="container">
         <div class="content">
-            <div class="posts">
-                <div class="page-heading">Posts about Паттерны</div>
-                <ul>
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 1, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-strategy/"><span>Swift Design Patterns: Strategy</span></a>
-</li>
+            <div class="page-heading">
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 4, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-observer/"><span>Swift Design Patterns: Observer</span></a>
-</li>
+    Лучшие практики swift (часть 1)
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 15, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-decorator/"><span>Swift Design Patterns: Decorator</span></a>
-</li>
+</div>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 16, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-factory-method/"><span>Swift Design Patterns: Factory Method</span></a>
-</li>
+            <div class="markdown">
+                
+    
+    
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 17, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-abstract-factory/"><span>Swift Design Patterns: Abstract Factory</span></a>
-</li>
+<p>Я начал изучать swift сразу же после анонса. За первые пару дней я прочитал The Swift Programming Language(Apple). Я писал небольшие приложения и одновременно игрался с новым языком, но никогда не чувствовал, что язык достаточно взрослый для больших проектов.</p>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-command/"><span>Swift Design Patterns: Command</span></a>
-</li>
+<p>Но это было до анонса swift 2.0. После анонса я стал использовать swift все больше и больше и наконец недавно начал писать большой проект для <a href="http://www.theappbusiness.com/">The App Business</a> используя swift.</p>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 18, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-singleton/"><span>Swift Design Patterns: Singleton</span></a>
-</li>
+<p>Я решил поделиться своими наблюдениями - некоторые из них очевидны и общеприняты, но, надеюсь, некоторые будут новыми для большинства читателей.</p>
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 21, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-adapter/"><span>Swift Design Patterns: Adapter</span></a>
-</li>
+<hr />
 
-                    
-                        <li class="post-item">
-    <span class="meta">Dec 23, 2015</span>
-    <a href="http://rag0n.github.io/blog/swift-design-patterns-facade/"><span>Swift Design Patterns: Facade</span></a>
-</li>
+<h2 id="предпочитайте-let-вместо-var">Предпочитайте <code>let</code> вместо <code>var</code></h2>
 
-                    
-                </ul>
+<p>Тренируйте свой мозг и рефлексы по умолчанию использовать let. Вы можете объявить переменную как var наперед, но я рекомендую использовать var только если вам обязательно надо изменить значение переменной. Это самый очевидный пункт из моих лучших практик, но это очень важно и стоит упоминания.</p>
+
+<p><strong><em>Примечание от переводчика:</em></strong> в xCode 7 компилятор автоматически анализирует, меняете ли вы значение у переменной, объявленной как <code>var</code> и предлагает изменить ее на <code>let</code> в противном случае.</p>
+
+<h2 id="предпочитайте-приватный-private-контроль-доступа">Предпочитайте приватный(<code>private</code>) контроль доступа</h2>
+
+<p>Опять очевидный пункт, но он также стоит упоминания. Всегда лучше скрывать как можно больше реализации(что означает доступ только из того же исходного файла).</p>
+
+<h2 id="предпочитайте-не-опциональные-типы">Предпочитайте не опциональные типы</h2>
+
+<p>Опциональные типы потрясающие. Этот концепт существует и в других языках(Scala, Haskell, и др).</p>
+
+<p>Но несмотря на то, какими полезными они могут быть, я все же пытаюсь избегать их, если это возможно. Это приводит к более чистому коду, если вы знаете, что переменная или атрибут содержат значение, или что функция возвращает действительное(не nil) значение.</p>
+
+<p>Например, я предпочитаю вызывать исключения в случаях, когда  функция не может вернуть действительное(не nil) значение. Посмотрите на <code>NSJSONSerialization.JSONObjectWithData</code>. Эта функция гарантирует, что она возвращает значение, иначе она вызывает исключение.</p>
+
+<h2 id="предпочитайте-guard-let-вместо-if-let">Предпочитайте <code>guard let</code> вместо <code>if let</code></h2>
+
+<p>Что вы можете сделать в <code>if let</code> блоке? Я почти всегда использую <code>guard let</code> и ранний возврат из функции, если что-то идет не так. Ранний возврат способствует более легкому чтению кода, т.к вы можете гарантировать корректное состояние переменных. Если вы не можете вычислить обязательное значение, используйте ранний возврат(return).</p>
+
+<h2 id="не-бойтесь-вызывать-исключения">Не бойтесь вызывать исключения</h2>
+
+<p>Вместо раннего возврата, вы можете вызвать исключение, как альтернативную точку выхода из функции. Обработка исключений в Objective-C (<code>@try @catch</code>) всегда была доступна, хотя использовать эту возможность было не принято. В Swift обработка исключений является фундаментальной идеей и вы должны использовать это.</p>
+
+<p>Например, у меня была функция парсинга, которая возвращала опциональный тип, если данные не могли быть синтаксически разобраны. Это означает, что вызывающая программа должна была проверять возвращаемое значение на <code>nil</code>. Я отрефакторил эту функцию так, чтобы она всегда возвращала действительное значение и вызывала исключение в противном случае.</p>
+
+<h2 id="не-используйте-guard-для-многочисленных-проверок">Не используйте <code>guard</code> для многочисленных проверок</h2>
+
+<p>Рассмотрим код:</p>
+
+<pre><code class="language-objectivec">guard let data = data,
+          son = self.jsonFromData(data),
+          authors = json[&quot;authors&quot;] else {
+  throw AuthorParserError
+}
+</code></pre>
+
+<p>В нем избегаются повторные вызовы исключения <code>AuthorParserError</code>, но по моему мнению было бы намного лучше написать так:</p>
+
+<pre><code class="language-objectivec">guard let data = data else {
+  throw AuthorParserError
+}
+guard let son = self.jsonFromData(data) else {
+  throw AuthorParserError
+}
+guard let authors = json[&quot;authors&quot;] else {
+  throw AuthorParserError
+}
+</code></pre>
+
+<p>В данном варианте можно протестировать каждый случай по отдельности и вы можете быть уверены, что вы проверили все случаи, иначе Xcode покажет ошибку на неразвернутых опциональных типах.</p>
+
+<h2 id="всегда-вносите-зависимости-даже-если-они-предназначены-только-для-тестирования">Всегда вносите зависимости, даже если они предназначены только для тестирования</h2>
+
+<p>В swift есть удобная возможность - необязательные аргументы функций. С одной стороны вы можете указывать как использовать функцию по умолчанию, с другой - облегчить тестирование классов,  в частности зависимости мок-объектов.</p>
+
+<p>Например, если ваш класс рассчитывает, что кто-либо будет обрабатывать сетевые запросы, то почему бы не передать мок-объект в инициализатор класса?</p>
+
+<p>Это облегчит тестирование, т.к вы можете создать мок-объект для зависимостей и протестировать функциональность одного конкретного класса(Конечно, вы также можете написать более интегрированные тесты).</p>
+
+<p>Например:</p>
+
+<pre><code class="language-objectivec">public init(requestDelegate: MyClassRequestDelegate = RequestManager()) {
+  self.requestDelegate = requestDelegate
+}
+</code></pre>
+
+<p>В коде выше зависимость - это на самом деле протокол, который облегчает тестирование, т.к нам достаточно создать мок-объект, который удовлетворяет этому протоколу.</p>
+
+<p>Некоторые программисты могут внести зависимость навсегда, вместо определения значения по умолчанию. Но мне кажется, что главная задача для этого типа зависимостей - облегчить тестирование. Если вы не пишите библиотеку, ваше приложение вероятно всегда использует одну и ту же зависимость, поэтому есть смысл определить ее как зависимость по умолчанию.</p>
+
+<h2 id="всегда-используйте-псевдонимы-типа-typealias-для-завершающих-обработчиков-если-это-возможно">Всегда используйте псевдонимы типа(<code>typealias</code>) для завершающих обработчиков(если это возможно)</h2>
+
+<p>Несмотря на то, что синтаксис замыканий может быть <a href="http://fuckingclosuresyntax.com/">запутывающим</a>,  синтаксис для псевдонима замыкания очевидно проще, чем эквивалентный <code>typedef</code> в Objective-C. Поэтому всегда объявляйте псевдоним для завершающих обработчиков(конечно если они не содержат обобщенных типов).</p>
+
+<pre><code class="language-objectivec">typealias SomethingCompletion = (result: SomeType) -&gt; Void
+</code></pre>
+
+<h2 id="используйте-перечисления-enum-для-уменьшения-неопределенности">Используйте перечисления(<code>enum</code>) для уменьшения неопределенности</h2>
+
+<p>В этом фрагменте кода я передаю завершающему обработчику кортеж, который повышает неопределенность.</p>
+
+<pre><code class="language-objectivec">doSomething() { (output: NSData?, error: NSError?) in
+  // need to check if we have output or error
+}
+</code></pre>
+
+<blockquote>
+<p>Заметьте, что я использую <code>NSError</code> вместо вызова исключения, т.к невозможно вызывать исключения асинхронно.</p>
+</blockquote>
+
+<p>Кортеж принимает 2 опциональных значения, что также противоречит тому, о чем о писал выше(используйте не опциональные типы).</p>
+
+<p>Что будет, если мы не передадим ни <code>output</code>, ни <code>error</code>? Что если мы передадим значения вовсе?</p>
+
+<p>Вы должны явно передавать аргументы в обработчик и в этом вам могут помочь перечисления. Например, вы могли бы определить перечисление <code>Result</code>:</p>
+
+<pre><code class="language-objectivec">enum Result&lt;U&gt; {
+  case .Success(output: U)
+  case .Failure(error: NSError)
+}
+</code></pre>
+
+<p>Теперь можно переписать обработчик ошибок так:</p>
+
+<pre><code class="language-objectivec">doSomething() { result in
+  switch (result) {
+  case .Success(let output):
+    // use output
+  case .Failure(let error):
+    // handle error
+  }
+}
+</code></pre>
+
+<p>Теперь стало абсолютно ясно, что если вызов функции был успешен, мы получим действительный результат(и мы даже будем знать его тип). И наоборот, если вызов неуспешен мы получим ошибку. Результат может быть либо успешным, либо не успешным. Без неопределенности.</p>
+
+<h2 id="трюк-для-обобщенного-завершающего-обработчика">Трюк для обобщенного завершающего обработчика</h2>
+
+<p>Предположим у вас есть функция, объявленная в протоколе:</p>
+
+<pre><code class="language-objectivec">protocol ServiceProvider {
+  func provideService&lt;U where U: AnyService&gt;(completion: (output: U) -&gt; Void)
+}
+</code></pre>
+
+<p>При объявлении класса,
+Если при объявлении класса, соответствующего протоколу(т.е реализация методов протокола) вы знаете как создать экземпляр объекта типа <code>U whee U: AnyService</code>, тогда вы можете вернуть объект соответствующего типа(<code>AnyService</code> протокол должен предоставлять способ создания/возвращения экземпляра).</p>
+
+<p>В этом случае вызывающий объект определяет какой объект должен быть возвращен в замыкании.</p>
+
+<p>Например:</p>
+
+<pre><code class="language-objectivec">myOtherClass.provideService { (output: RoomService) in
+  // do something with the RoomService
+}
+</code></pre>
+
+<p>Реализация <code>provideService</code> ничего не знает о классе <code>RoomService</code>. Этот класс просто удовлетворяет протоколу <code>AnyService</code> благодаря чему можно создать его экземпляры в замыкании.</p>
+
+<p>Мне особенно нравится идея, что вызывающий может получить обратно именно тот объект, который он хочет. Вызывающий объект просто говорит: &ldquo;В завершающем обработчике я хочу получить экземпляр <code>RoomService</code> и реализованная функция знает, как это сделать&rdquo;.</p>
+
+<p>Это полная противоположность блокам в <code>Objective C</code>, где мы должны были бы объявить аргумент завершающего обработчика с типом <code>id</code> и вызывающий объект сказал бы компилятору какой тип объекта он ожидает получить назад при реализации завершающего обработчика.</p>
+
+<h2 id="лучшие-практики-замыканий">Лучшие практики замыканий</h2>
+
+<p>Я пытаюсь сохранять замыкания как можно более краткими и лаконичными.</p>
+
+<ul>
+<li>Если замыкание возвращает <code>Void</code>, не пишите возращаемое значение</li>
+<li>Если тип объекта может быть выведен компилятором, не указывайте его тип</li>
+<li>Если замыкание имеет только один аргумент, не помещайте его в скобки</li>
+<li>Всегда передавайте замыкание как последний аргумент</li>
+<li>Всегда используйте trail(хвостовой) синтакс для замыкания, передающихся как последний аргумент</li>
+<li>Не используйте скобки, если компилятор того не требует(например, если функция имеет один аргумент и этот аргумент - замыкание)</li>
+</ul>
+
+<p>Все эти утверждения спорные, но сейчас я имеено так использую замыкания. Например:</p>
+
+<pre><code class="language-objectivec">myObject.doSomething { output in
+  // do something with the output
+}
+</code></pre>
+
+<p>вместо:</p>
+
+<pre><code class="language-objectivec">myObject.doSomething() { (output: NSData?) -&gt; Void in
+  // do something with the output
+}
+</code></pre>
+
+<h4 id="p-s">P.S</h4>
+
+<p>Я знаю, что перевод ужасен, именно поэтому я и сделал его(несмотря на то, что в статье используется простой англиский). Но невозможно улучшить какой-либо навык, ничего не делая. The growth mindset и все такое.</p>
+
+<p>Ссылка на <a href="http://sam.dods.co/blog/2015/09/21/some-swift-best-practices/">оригинал</a></p>
+
+
             </div>
         </div>
     </div>
