@@ -13,15 +13,15 @@
     
     
     <item>
-      <title>About</title>
+      <title>About me</title>
       <link>http://rag0n.github.io/about/</link>
       <pubDate>Sat, 20 Jan 2018 08:12:09 +0000</pubDate>
       
       <guid>http://rag0n.github.io/about/</guid>
-      <description>Hi, I&amp;rsquo;m Alexander! I&amp;rsquo;m a software developer living in Saint-Petersburg.
-Currently I&amp;rsquo;m developing iOS apps using Swift language. Some of them you can find on my GitHub page.
-I&amp;rsquo;m spending a lot of time on studying programming stuff and now I&amp;rsquo;m participating in Open Source Society University.
-Feel free to contact.</description>
+      <description>Hi, I&amp;rsquo;m a software developer. I&amp;rsquo;m living in Saint-Petersburg, Russia.
+My main competence is iOS development. I can develop apps by using Objective-C, Swift or even JavaScript. I&amp;rsquo;m in love with programming and always trying to learn something new.
+On github you can found some examples of my work:
+ Note taking app (WIP). This project doesn&amp;rsquo;t have good UI, but its build by using TDD with experimental approach to architecture; UITextView with markdown support (WIP) - project is at an early stage of developmen;  List of languages that I used to program:</description>
     </item>
     
     <item>
